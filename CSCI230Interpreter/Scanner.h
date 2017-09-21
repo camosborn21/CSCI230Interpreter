@@ -128,7 +128,7 @@ public:
 	//****************************************************************************
 	static void getPerLineTokenVectFromOneCharArray
 	(
-		const char* statement,
+		const char* ptrOriginalStatement,
 		perLineTokenVector & tokenVector
 	);
 
