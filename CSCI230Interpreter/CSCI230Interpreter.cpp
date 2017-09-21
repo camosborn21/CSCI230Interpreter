@@ -2,10 +2,13 @@
 //
 
 #include "stdafx.h"
+#include "ProgramUI.h"
 
 
-int main()
+void main()
 {
-    return 0;
+	ProgramUI interpreterUi;
+	interpreterUi.startInterface();
+    
 }
 
