@@ -56,6 +56,7 @@ private:
 	string _tokenValue;
 
 public:
+	TokenData(string value);
 	TokenData(string value, tokenCategory category);
 
 };

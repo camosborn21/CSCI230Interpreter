@@ -27,7 +27,7 @@ const char DOUBLE_QUOTE = '\"';
 //*  They analyze one C-style character array or a string object and 
 //*  collect the tokens there as a vetor of token strings.
 //***************************************************************************
-void Scanner::getPerLineTokenVectFromOneCharArray(const char * ptrOriginalStatement, perLineTokenVector & tokenVector)
+void Scanner::getPerLineTokenVectFromOneCharArray(const char * ptrOriginalStatement, perLineTokenDataVector & tokenVector)
 // 1. One line of code is stored in a C-style character array: statement, 
 //    with a terminating '\0' NULL character to end the string stored there.
 // 2. In the end, we'll store all the tokens, each as an object of the string class,
@@ -216,11 +216,16 @@ void Scanner::getPerLineTokenVectFromOneCharArray(const char * ptrOriginalStatem
 				else
 					endIndex++;
 		}
+
+
 		//tokenBuffer.substr(startIndex, endIndex - startIndex) is a token.
 		//Append such a token in the token vector to tokenVector
 		//[9/21/2017 13:10] Cameron Osborn: this needs to change because at this point tokenVector isn't taking a string any more, it's taking a token data object
-		tokenVector.push_back(tokenBuffer.substr(startIndex, endIndex - startIndex));
-		
+		//tokenVector.push_back(tokenBuffer.substr(startIndex, endIndex - startIndex));
+		//new TokenData((tokenBuffer.substr(startIndex, endIndex - startIndex)))
+		TokenData *data = new TokenData(tokenBuffer.substr(startIndex, endIndex - startIndex));
+
+		tokenVector.push_back(*data);
 
 		//Detect the next non-space character with an index after current endIndex.
 		//Set startIndex as the index this character or

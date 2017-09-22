@@ -67,12 +67,12 @@ using namespace std;
 //****************************************************************************
 // define a mnemonic name for the type to store tokens of one line of statement
 //****************************************************************************
-typedef vector<TokenData> perLineTokenVector;
+typedef vector<TokenData> perLineTokenDataVector;
 
 //****************************************************************************
 // define a mnemonic name for the type to store tokens of lines of statement
 //****************************************************************************
-typedef vector<perLineTokenVector> vectOfTokenVects;
+typedef vector<perLineTokenDataVector> vectOfTokenVects;
 
 //[9/21/2017 02:27] Cameron Osborn: Vector of tokencategories and its parent vector of per line token vectors has been omitted. That functionality is included within the TokenData class
 
@@ -129,12 +129,12 @@ public:
 	static void getPerLineTokenVectFromOneCharArray
 	(
 		const char* ptrOriginalStatement,
-		perLineTokenVector & tokenVector
+		perLineTokenDataVector & tokenVector
 	);
 
 	static void getPerLineTokenVectFromOneStringObject
 	(const string statement,
-		perLineTokenVector & tokenVector
+		perLineTokenDataVector & tokenVector
 	);
 
 	//[9/21/2017 02:42] Cameron Osborn: omitted because it's covered in the TokenData Class
