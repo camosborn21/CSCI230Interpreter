@@ -552,16 +552,18 @@ void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & toke
 //[9/22/2017 02:09] Cameron Osborn: This is really the entry point to the whole class.
 void OriginalScanner::getLexicalInfo(const vector<string>& linesOfStatements, vectOfTokenVects & tokenVectors, vectOfCategoryVects & categoryVectors)
 {
+	tokenVectors.clear();
+	categoryVectors.clear();
 	vector<string> statements = linesOfStatements;
 	for(vector<string>::iterator statement= statements.begin(); statement<statements.end(); ++statement)
 	{
 		perLineTokenVector T;
 		getPerLineTokenVectFromOneStringObject(*statement, T);
+		tokenVectors.push_back(T);
 		perLineCategoryVector C;
 		getCategoryVectorFromTokenVector(T, C);
-
+		categoryVectors.push_back(C);
 	}
-
 }
 
 //**************************************************************************

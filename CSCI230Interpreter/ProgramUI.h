@@ -6,7 +6,7 @@
 
 #include <vector>  //[9/13/2017 14:07] Cameron Osborn: include support of vector container
 #include <string> //[9/13/2017 14:07] Cameron Osborn: include support of new C++ string class
-
+#include "OriginalScanner.h" 
 using namespace std;
 
 class ProgramUI
@@ -32,6 +32,12 @@ private:
 
 	//[9/18/2017 18:03] Cameron Osborn: Holds string literal for invalid operation: function not yet programmed
 	string InvalidOperationFunctionNotYetProgrammed = "Invalid Operation Exception: Function not yet programmed.";
+
+	//[9/23/2017 16:24] Cameron Osborn: The program level vector which holds all of the category vectors for each statement in the loaded program
+	vectOfCategoryVects categoryVectorsForAllStatments;
+
+	//[9/23/2017 16:24] Cameron Osborn: The program level vector which holds all of the statement tokens for the entire loaded program.
+	vectOfTokenVects tokenVectorsForAllStatements;
 
 public:
 	//[9/13/2017 14:07] Cameron Osborn: used to set the maximum length of file names. 
@@ -75,6 +81,9 @@ public:
 
 	//[9/17/2017 21:05] Cameron Osborn: Closes the current document
 	void closeCurrentDocument();
+
+	//[9/23/2017 16:19] Cameron Osborn: Display the lexical analysis of the loaded program
+	void getLexicalAnalysis();
 
 	//[9/17/2017 22:16] Cameron Osborn: Offers user the chance to save, don't save, or cancel an action which would otherwise close the current document or quit the application. bool type procedure returns true if calling function should continue actions.
 	bool offerSaveContinueCancel();

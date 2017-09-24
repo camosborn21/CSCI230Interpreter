@@ -6,6 +6,7 @@
 #include <string>
 #include <cstring>
 #include <conio.h>
+//#include "OriginalScanner.h" 
 using namespace std;
 
 void ProgramUI::loadProgramFromFile()
@@ -530,6 +531,16 @@ void ProgramUI::closeCurrentDocument() {
 	}
 }
 
+void ProgramUI::getLexicalAnalysis()
+{
+	if (checkStatementsInBuffer() == true) {
+
+		OriginalScanner scanner;
+		scanner.getLexicalInfo(lines, tokenVectorsForAllStatements, categoryVectorsForAllStatments);
+		scanner.displayLexicalInfo(tokenVectorsForAllStatements, categoryVectorsForAllStatments);
+	}
+}
+
 void ProgramUI::endOfService(const string service)
 {
 	//[9/16/2017 21:45] Cameron Osborn: Writes an output message for each action completion.
@@ -599,22 +610,23 @@ void ProgramUI::startInterface()
 		cout << HorizontalRule << endl;
 		cout << "**  MENU:(press a character to select an option)  **" << endl;
 		cout << HorizontalRule << endl;
-		cout << "Q. [QUIT]            Quit." << endl;
-		cout << "L. [LOAD]            Read in a program (lines of statements) from a file" << endl;
-		cout << "S. [SAVE]            Save lines of statement in original file." << endl;
-		cout << "N. [SAVE AS NEW]     Save lines of statement as a new file." << endl;
-		cout << "C. [CLOSE DOCUMENT]  Closes the current document." << endl;
+		cout << "Q. [QUIT]              Quit." << endl;
+		cout << "L. [LOAD]              Read in a program (lines of statements) from a file." << endl;
+		cout << "S. [SAVE]              Save lines of statement in original file." << endl;
+		cout << "N. [SAVE AS NEW]       Save lines of statement as a new file." << endl;
+		cout << "C. [CLOSE DOCUMENT]    Closes the current document." << endl;
 		cout << endl;
-		cout << "D. [DISPLAY]         Display the source code as lines of statements" << endl;
+		cout << "D. [DISPLAY]           Display the source code as lines of statements." << endl;
 		cout << endl;
-		cout << "A. [APPEND]          Append new lines to the end of the program" << endl;
-		cout << "I. [INSERT]          Insert new lines before an existing line" << endl;
-		cout << "X. [DELETE]          Delete a range of existing lines" << endl;
-		cout << "R. [REPLACE]         Replace the contents of an existing line" << endl;
+		cout << "A. [APPEND]            Append new lines to the end of the program." << endl;
+		cout << "I. [INSERT]            Insert new lines before an existing line." << endl;
+		cout << "X. [DELETE]            Delete a range of existing lines." << endl;
+		cout << "R. [REPLACE]           Replace the contents of an existing line." << endl;
 		cout << endl;
-		cout << "P. [PARSE]           Parse and indent the code" << endl;
-		cout << "E. [EXECUTE]         Execute (run) the program" << endl;
-		cout << "T. [TOGGLE]          Toggle the execution debug mode" << endl;
+		cout << "G. [SHOW LEXICAL DATA] Returns an analysis of the lexical structure of the code." << endl;
+		cout << "P. [PARSE]             Parse and indent the code." << endl;
+		cout << "E. [EXECUTE]           Execute (run) the program." << endl;
+		cout << "T. [TOGGLE]            Toggle the execution debug mode." << endl;
 		cout << HorizontalRule << endl << endl;
 		cout << "Your choice is: ";
 
@@ -682,6 +694,12 @@ void ProgramUI::startInterface()
 			cout << "[SAVE AS NEW]:" << endl;
 			saveProgramIntoFile();
 			endOfService("[SAVE CODE INTO A NEW FILE]");
+			break;
+
+		case 'G': case 'g':
+			cout << "[GET LEXICAL DATA]: " << endl;
+			getLexicalAnalysis();
+			endOfService("[Get LEXICAL DATA]");
 			break;
 
 		case 'P': case 'p':
