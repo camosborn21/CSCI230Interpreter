@@ -46,6 +46,8 @@ typedef enum
 
 	COMMENT,	// The token // that starts a line of comments
 
+	COMMENT_TEXT,
+
 	UNKNOWN,		// Something that we cannot recognize its category
 
 } tokenCategory;
@@ -58,6 +60,9 @@ private:
 public:
 	TokenData(string value);
 	TokenData(string value, tokenCategory category);
-
+	tokenCategory Category();
+	string Token();
+	void ParseToken();
+	void TokenIsCommentText();
 };
 

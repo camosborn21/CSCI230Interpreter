@@ -27,12 +27,6 @@
     <ClInclude Include="ProgramUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TokenData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Scanner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="OriginalScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -45,12 +39,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProgramUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TokenData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Scanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="OriginalScanner.cpp">

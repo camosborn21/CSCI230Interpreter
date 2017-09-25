@@ -61,6 +61,8 @@ typedef enum
 
 	COMMENT,	// The token // that starts a line of comments
 
+	COMMENT_TEXT, //Any text on a line which follows //
+
 	UNKNOWN,		// Something that we cannot recognize its category
 
 } tokenCategory;

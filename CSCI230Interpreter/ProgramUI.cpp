@@ -40,6 +40,7 @@ void ProgramUI::loadProgramFromFile()
 	//[9/14/2017 22:26] Cameron Osborn: Assign current file
 	currentFile = fileName;
 	fileLoaded = true;
+	uiDirty = false;
 
 	//[9/13/2017 17:31] Cameron Osborn: If the file is loaded successfully then push all non-blank lines to the lines vector
 	string inputBuffer;

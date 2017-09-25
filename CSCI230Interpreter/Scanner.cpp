@@ -224,7 +224,7 @@ void Scanner::getPerLineTokenVectFromOneCharArray(const char * ptrOriginalStatem
 		//tokenVector.push_back(tokenBuffer.substr(startIndex, endIndex - startIndex));
 		//new TokenData((tokenBuffer.substr(startIndex, endIndex - startIndex)))
 		TokenData *data = new TokenData(tokenBuffer.substr(startIndex, endIndex - startIndex));
-
+		
 		tokenVector.push_back(*data);
 
 		//Detect the next non-space character with an index after current endIndex.

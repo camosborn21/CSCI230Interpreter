@@ -402,7 +402,7 @@ bool OriginalScanner::isSTRING_LITERAL(const string & token)
 {
 	if (token[0] == DOUBLE_QUOTE && token[token.size() - 1] == DOUBLE_QUOTE)
 		return true;
-	
+
 	return false;
 }
 bool OriginalScanner::isLEFT_PARENTHESIS(const string & token)
@@ -481,54 +481,65 @@ bool OriginalScanner::isCOMMENT(const string & token)
 //**************************************************************************
 void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & tokenVector, perLineCategoryVector & categoryVector)
 {
-	for(perLineTokenVector::iterator itPLTV = tokenVector.begin(); itPLTV < tokenVector.end(); ++itPLTV)
+	bool isComment = false;
+	for (perLineTokenVector::iterator itPLTV = tokenVector.begin(); itPLTV < tokenVector.end(); ++itPLTV)
 	{
-		if (isKEYWORD(*itPLTV))
-			categoryVector.push_back(KEYWORD);
-		else
-			if (isASSIGNMENT_OP(*itPLTV))
-				categoryVector.push_back(ASSIGNMENT_OP);
+		if (isComment == false) {
+			if (isKEYWORD(*itPLTV))
+				categoryVector.push_back(KEYWORD);
 			else
-				if (isID_NAME(*itPLTV))
-					categoryVector.push_back(ID_NAME);
+				if (isASSIGNMENT_OP(*itPLTV))
+					categoryVector.push_back(ASSIGNMENT_OP);
 				else
-					if (isNUMERICAL_OP(*itPLTV))
-						categoryVector.push_back(NUMERICAL_OP);
+					if (isID_NAME(*itPLTV))
+						categoryVector.push_back(ID_NAME);
 					else
-						if (isRELATIONAL_OP(*itPLTV))
-							categoryVector.push_back(RELATIONAL_OP);
+						if (isNUMERICAL_OP(*itPLTV))
+							categoryVector.push_back(NUMERICAL_OP);
 						else
-							if (isLOGICAL_OP(*itPLTV))
-								categoryVector.push_back(LOGICAL_OP);
+							if (isRELATIONAL_OP(*itPLTV))
+								categoryVector.push_back(RELATIONAL_OP);
 							else
-								if (isSTRING_LITERAL(*itPLTV))
-									categoryVector.push_back(STRING_LITERAL);
+								if (isLOGICAL_OP(*itPLTV))
+									categoryVector.push_back(LOGICAL_OP);
 								else
-									if (isLEFT_PARENTHESIS(*itPLTV))
-										categoryVector.push_back(LEFT_PARENTHESIS);
+									if (isSTRING_LITERAL(*itPLTV))
+										categoryVector.push_back(STRING_LITERAL);
 									else
-										if (isRIGHT_PARENTHESIS(*itPLTV))
-											categoryVector.push_back(RIGHT_PARENTHESIS);
+										if (isLEFT_PARENTHESIS(*itPLTV))
+											categoryVector.push_back(LEFT_PARENTHESIS);
 										else
-											if (isLEFT_CURLYBRACE(*itPLTV))
-												categoryVector.push_back(LEFT_CURLYBRACE);
+											if (isRIGHT_PARENTHESIS(*itPLTV))
+												categoryVector.push_back(RIGHT_PARENTHESIS);
 											else
-												if (isRIGHT_CURLYBRACE(*itPLTV))
-													categoryVector.push_back(RIGHT_CURLYBRACE);
+												if (isLEFT_CURLYBRACE(*itPLTV))
+													categoryVector.push_back(LEFT_CURLYBRACE);
 												else
-													if (isSEMICOLON(*itPLTV))
-														categoryVector.push_back(SEMICOLON);
+													if (isRIGHT_CURLYBRACE(*itPLTV))
+														categoryVector.push_back(RIGHT_CURLYBRACE);
 													else
-														if (isCOLON(*itPLTV))
-															categoryVector.push_back(COLON);
+														if (isSEMICOLON(*itPLTV))
+															categoryVector.push_back(SEMICOLON);
 														else
-															if (isCOMMA(*itPLTV))
-																categoryVector.push_back(COMMA);
+															if (isCOLON(*itPLTV))
+																categoryVector.push_back(COLON);
 															else
-																if (isCOMMENT(*itPLTV))
-																	categoryVector.push_back(COMMENT);
+																if (isCOMMA(*itPLTV))
+																	categoryVector.push_back(COMMA);
 																else
-																	categoryVector.push_back(UNKNOWN);		
+																	if (isNUMERICAL_LITERAL(*itPLTV))
+																		categoryVector.push_back(NUMERICAL_LITERAL);
+																	else
+																		if (isCOMMENT(*itPLTV)) {
+																			categoryVector.push_back(COMMENT);
+																			isComment = true;
+																		}
+																		else
+																			categoryVector.push_back(UNKNOWN);
+		} else
+		{
+			categoryVector.push_back(COMMENT_TEXT);
+		}
 	}
 
 
@@ -549,13 +560,13 @@ void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & toke
 //	getPerLineTokenVectFromOneStringObject (implemented in section 1 above), and
 //	getCategoryVectorFromTokenVector (to be implemented in section 3 above)
 //****************************************************************************
-//[9/22/2017 02:09] Cameron Osborn: This is really the entry point to the whole class.
+//[9/22/2017 02:09] Cameron Osborn: This is the entry point to the whole class.
 void OriginalScanner::getLexicalInfo(const vector<string>& linesOfStatements, vectOfTokenVects & tokenVectors, vectOfCategoryVects & categoryVectors)
 {
 	tokenVectors.clear();
 	categoryVectors.clear();
 	vector<string> statements = linesOfStatements;
-	for(vector<string>::iterator statement= statements.begin(); statement<statements.end(); ++statement)
+	for (vector<string>::iterator statement = statements.begin(); statement < statements.end(); ++statement)
 	{
 		perLineTokenVector T;
 		getPerLineTokenVectFromOneStringObject(*statement, T);
@@ -582,13 +593,10 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 		return;
 	}
 
-	for (size_t i = 0; i<tokenVectors.size(); i++)
+	for (size_t i = 0; i < tokenVectors.size(); i++)
 	{
-		perLineTokenVector tokenVect;
-		perLineCategoryVector categoryVect;
-
-		tokenVect = tokenVectors[i];
-		categoryVect = categoryVectors[i];
+		perLineTokenVector tokenVect = tokenVectors[i];
+		perLineCategoryVector categoryVect = categoryVectors[i];
 
 		if (tokenVect.size() != categoryVect.size())
 		{
@@ -603,7 +611,7 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 			<< "***************************** "
 			<< endl;
 
-		for (size_t j = 0; j<tokenVect.size(); j++)
+		for (size_t j = 0; j < tokenVect.size(); j++)
 		{
 			string categoryInfo;
 			switch (categoryVect[j])
@@ -622,6 +630,9 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 				break;
 			case COMMENT:
 				categoryInfo = "COMMENT";
+				break;
+			case COMMENT_TEXT:
+				categoryInfo = "COMMENT_TEXT";
 				break;
 			case ID_NAME:
 				categoryInfo = "ID_NAME";
@@ -659,12 +670,25 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 			default:
 				categoryInfo = "UNKNOWN";
 			}
+			string tabAlignment;
+
+			int tokenLength = tokenVect[j].length();
+			if (tokenLength >= 21)
+				tabAlignment = "\t";
+			else
+				if (tokenLength >= 14)
+					tabAlignment = "\t\t";
+				else
+					if (tokenLength >= 7)
+						tabAlignment = "\t\t\t";
+					else
+						tabAlignment = "\t\t\t\t";
 
 			cout << "Token["
 				<< j
 				<< "]:"
 				<< tokenVect[j]
-				<< "\t\t"
+				<< tabAlignment
 				<< categoryInfo
 				<< endl;
 		}//end for
