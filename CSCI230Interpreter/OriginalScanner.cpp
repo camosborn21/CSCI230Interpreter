@@ -127,8 +127,9 @@ void OriginalScanner::getPerLineTokenVectFromOneCharArray
 				((c == '|') && (nextChar != '|'))
 				// end of logical operator: ||
 				||
-				((c == '!'))
-				// end of logical operator: !
+				((c == '!') && (nextChar != '='))
+				// end of logical operator: ! but not followed by =
+				//[9/26/2017 12:28] Cameron Osborn: updated to check for Biola Relational Operator !=
 				||
 				(c == '(' || c == ')')
 				// parenthesis
@@ -316,6 +317,7 @@ vector<string> getBIOLARelationalOperators()
 	vect.push_back("<");
 	vect.push_back(">=");
 	vect.push_back("<=");
+	vect.push_back("!=");
 	return vect;
 }
 //[9/22/2017 00:17] Cameron Osborn: returns a vector containing all the arithmetic operators in the BIOLA programming language
@@ -536,7 +538,8 @@ void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & toke
 																		}
 																		else
 																			categoryVector.push_back(UNKNOWN);
-		} else
+		}
+		else
 		{
 			categoryVector.push_back(COMMENT_TEXT);
 		}
