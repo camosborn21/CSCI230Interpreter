@@ -138,6 +138,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="OriginalScanner.h" />
     <ClInclude Include="ProgramUI.h" />
     <ClInclude Include="stdafx.h" />
@@ -145,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSCI230Interpreter.cpp" />
+    <ClCompile Include="ExpressionEvaluator.cpp" />
     <ClCompile Include="OriginalScanner.cpp" />
     <ClCompile Include="ProgramUI.cpp" />
     <ClCompile Include="stdafx.cpp">
