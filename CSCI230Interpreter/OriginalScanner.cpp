@@ -249,7 +249,9 @@ void OriginalScanner::getPerLineTokenVectFromOneCharArray
 
 }
 
-void OriginalScanner::getPerLineTokenVectFromOneStringObject(const string statement, perLineTokenVector & tokenVector)
+
+
+void OriginalScanner::getPerLineTokenVectFromOneStringObject(const string statement, perLineTokenVector& tokenVector)
 // 1. One line of code is stored in string object: statement. 
 // 2. In the end, we'll store all the tokens, each as an object of the string class,
 //    in tokenVector, which is a vector of strings.

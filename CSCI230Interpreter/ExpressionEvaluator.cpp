@@ -185,6 +185,29 @@ bool ExpressionEvaluator::postfixEvaluator(const expVector & postfixExp, floatVa
 
 	//return false;
 }
+bool OperatorPostfixCheck(expVector &stack, string operatorToken)
+{
+	//[9/28/2017 22:15] Cameron Osborn: when the infix to postfix conversion encounters an operator it loops through the stack until one of three rules returns true
+	if (
+		//[9/28/2017 22:19] Cameron Osborn: Stack is empty
+		stack.size() == 0
+		)
+		return false;
+
+	if (//[9/28/2017 22:19] Cameron Osborn: Top of stack is not some sort of operator
+		!(OriginalScanner::isRELATIONAL_OP(stack.back()) ||
+			OriginalScanner::isLOGICAL_OP(stack.back()) ||
+			OriginalScanner::isNUMERICAL_OP(stack.back())))
+		return false;
+
+	if (//[9/28/2017 22:21] Cameron Osborn: The operator on the top of the stack is of lower precedence than the operatorToken in question from the postfix conversion
+		ExpressionEvaluator::precedenceLevel(stack.back()) < ExpressionEvaluator::precedenceLevel(operatorToken))
+		return false;
+
+
+
+	return true;
+}
 
 bool ExpressionEvaluator::infixToPostfixConversion(const expVector & infixExp, expVector & postfixExp)
 //Convert the infix expression in infixExp into a corresponding postfix expression.
@@ -196,15 +219,54 @@ bool ExpressionEvaluator::infixToPostfixConversion(const expVector & infixExp, e
 		if (OriginalScanner::isNUMERICAL_LITERAL((*pos)) || OriginalScanner::isID_NAME(*pos)) {
 			//[9/28/2017 13:12] Cameron Osborn: check if the token is an operand; valid options are numerical literal and variable
 			postfixExp.push_back(*pos);
-
 		}
+
+		//[9/28/2017 21:34] Cameron Osborn: Push the left parenthesis to the top of the stack.
 		if (OriginalScanner::isLEFT_PARENTHESIS(*pos))
 			stackVect.push_back(*pos);
 
+		if (OriginalScanner::isRIGHT_PARENTHESIS(*pos))
+		{
+			//[9/28/2017 21:35] Cameron Osborn: If we encounter a right parenthesis then in a valid expression it's been preceded by a left paren.
+			// scan backward through the stack looking for that open paren. Each non left paren should be pushed to the post fix vector.
+			while (stackVect.back() != "(")
+			{
+				if (stackVect.size() == 0)
+					//[9/28/2017 21:31] Cameron Osborn: No elements in vector. Invalid expression.
+					return false;
+				//[9/28/2017 21:33] Cameron Osborn: Pass each non left parenthesis token to the postfix expression then pop it from the stack
+				postfixExp.push_back(stackVect.back());
+				stackVect.pop_back();
+			}
+
+			//[9/28/2017 21:33] Cameron Osborn: Now pop the left parenthesis from the stack.
+			stackVect.pop_back();
+		}
+
+		if (OriginalScanner::isNUMERICAL_OP(*pos) ||
+			OriginalScanner::isRELATIONAL_OP(*pos) ||
+			OriginalScanner::isLOGICAL_OP(*pos)
+			)
+		{
+			while (OperatorPostfixCheck(stackVect,*pos))
+			{
+				postfixExp.push_back(stackVect.back());
+				stackVect.pop_back();
+			}
+			stackVect.push_back(*pos);
+		}
+
 
 	}
-	return false;
+	while(stackVect.size()!= 0)
+	{
+		postfixExp.push_back(stackVect.back());
+		stackVect.pop_back();
+	}
+
+	return true;
 }
+
 
 bool ExpressionEvaluator::infixEvaluator(const expVector & infixExp, floatVarValueTable & varTable, float & expValue)
 //Evaluate the value of the infix expression in postfixExp

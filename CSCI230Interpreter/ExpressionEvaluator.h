@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 using namespace std;
-typedef map<string, float> floatVarValueTable;
+  typedef map<string, float> floatVarValueTable;
 //A variable table recording the names (strings) of variables
 //and the current floating point values of these variables
 
