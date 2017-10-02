@@ -19,6 +19,7 @@ namespace CSCI230InterpreterUnitTesting
 		{
 			
 		}
+		//[10/2/2017 03:16] Cameron Osborn: Test the functionality of the token parser against a pre-loaded vector to ensure successful delineation of tokens.
 		TEST_METHOD(PerLineTokenVectorCorrectlyParsedForAllPossibleCategories)
 		{
 			//Arrange
@@ -75,6 +76,7 @@ namespace CSCI230InterpreterUnitTesting
 			Assert::IsTrue(expectedVector == tokenVector);
 		}
 
+		//[10/2/2017 03:17] Cameron Osborn: Test the functionality of the category parser against a pre-loaded vector to ensure successful interpretation of tokens.
 		TEST_METHOD(GetCategoryVectorFromTokenVectorParsesAllCategories)
 		{
 			//Arrange
