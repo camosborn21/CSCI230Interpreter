@@ -21,9 +21,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CSCI230Interpreter\ExpressionEvaluator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\CSCI230Interpreter\OriginalScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -32,13 +29,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CSCI230Interpreter\ExpressionEvaluator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\CSCI230Interpreter\OriginalScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tExpressionEvaluator.cpp">
+    <ClCompile Include="tOriginalScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
