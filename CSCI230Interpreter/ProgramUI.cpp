@@ -534,11 +534,8 @@ void ProgramUI::closeCurrentDocument() {
 
 void ProgramUI::getLexicalAnalysis()
 {
+	//[10/2/2017 22:56] Cameron Osborn: Retrieves and displays lexical information and analysis for the loaded program.
 	if (checkStatementsInBuffer() == true) {
-
-		//OriginalScanner scanner;
-		//scanner.getLexicalInfo(lines, tokenVectorsForAllStatements, categoryVectorsForAllStatments);
-		//scanner.displayLexicalInfo(tokenVectorsForAllStatements, categoryVectorsForAllStatments);
 		OriginalScanner::getLexicalInfo(lines, tokenVectorsForAllStatements, categoryVectorsForAllStatments);
 		OriginalScanner::displayLexicalInfo(tokenVectorsForAllStatements, categoryVectorsForAllStatments);
 	}
