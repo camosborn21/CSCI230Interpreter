@@ -19,7 +19,7 @@ namespace CSCI230InterpreterUnitTesting
 
 		TEST_CLASS_INITIALIZE(setUpTests)
 		{
-			
+			varTable["r"] = 0;
 			varTable["s"] = 1;
 			varTable["t"] = 2;
 			varTable["u"] = 3;
@@ -802,6 +802,161 @@ namespace CSCI230InterpreterUnitTesting
 		{
 			//Arrange
 			const string rawExpressionString = "!0";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(1), returnedValue);
+		}
+
+		//[10/2/2017 22:33] Cameron Osborn: TEST LOGICAL OPERATORS WITH VARIABLES
+		//[10/2/2017 22:33] Cameron Osborn: Added 0 value variable to table.
+		//[10/2/2017 22:33] Cameron Osborn: Test logical operator && with variables with expected result: s=1, t=2 true for s==s && t==t
+		TEST_METHOD(EvaluatesLogicalANDOperatorPassWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "s==s&&t==t";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(1), returnedValue);
+		}
+		//[10/2/2017 22:40] Cameron Osborn: Test logical operator && with variables with expected result: r=0, s=1, t=2 false for s==r && t==t
+		TEST_METHOD(EvaluatesLogicalANDOperatorFailOnFirstWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "s==r&&t==t";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(0), returnedValue);
+		}
+		//[10/2/2017 22:40] Cameron Osborn: Test logical operator && with variables with expected result: s=1, t=2 false for s==s && s==t
+		TEST_METHOD(EvaluatesLogicalANDOperatorFailOnSecondWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "s==s&&s==t";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(0), returnedValue);
+		}
+		//[10/2/2017 22:40] Cameron Osborn: Test logical operator && with variables with expected result: s=1, t=2 false for s==t && s==t
+		TEST_METHOD(EvaluatesLogicalANDOperatorFailOnBothWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "s==t&&s==t";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(0), returnedValue);
+		}
+		//[10/2/2017 22:40] Cameron Osborn: Test logical operator || with variables with expected result: s=1, t=2, u=3 false for s==t || t==u
+		TEST_METHOD(EvaluatesLogicalOROperatorFailWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "s==t || t==u";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(0), returnedValue);
+		}
+		//[10/2/2017 22:40] Cameron Osborn: Test logical operator || with variables with expected result: t=2, u=3  true for t==t||t==u
+		TEST_METHOD(EvaluatesLogicalOROperatorPassOnFirstWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "t==t||t==u";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(1), returnedValue);
+		}
+		//[10/2/2017 22:39] Cameron Osborn: Test logical operator || with variables with expected result: s=1, t=2, u=3 true for t==s || u==u
+		TEST_METHOD(EvaluatesLogicalOROperatorPassOnSecondWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "t==s || u==u";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(1), returnedValue);
+		}
+		//[10/2/2017 22:39] Cameron Osborn: Test logical operator || with variables with expected result: t=2, u=3 true for t==t || u == u
+		TEST_METHOD(EvaluatesLogicalOROperatorPassOnEitherWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "t==t || u == u";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(1), returnedValue);
+		}
+
+		//[10/2/2017 22:39] Cameron Osborn: Test logical operator ! with variables with expected result: s=1 false for !s (true)
+		TEST_METHOD(EvaluatesLogicalNOTOperatorPassOnTrueToFalseWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "!s";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(0), returnedValue);
+		}
+
+		//[10/2/2017 22:38] Cameron Osborn: Test logical operator ! with variables with expected result: r=0 true for !r (false)
+		TEST_METHOD(EvaluatesLogicalNOTOperatorPassOnFalseToTrueWithVariables)
+		{
+			//Arrange
+			const string rawExpressionString = "!r";
 			expVector infixExp;
 			float returnedValue;
 			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);

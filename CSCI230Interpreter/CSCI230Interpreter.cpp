@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void actual_main()
+void main()
 {
 	ProgramUI interpreterUi;
 	interpreterUi.startInterface();
@@ -21,7 +21,7 @@ void actual_main()
 }
 
 
-int main()
+void main_ExpressionEvalutorTesting()
 {
 	//Set up a table to store values of 8 variables
 	floatVarValueTable varTable;
