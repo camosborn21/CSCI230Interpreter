@@ -536,9 +536,8 @@ void ProgramUI::getLexicalAnalysis()
 {
 	if (checkStatementsInBuffer() == true) {
 
-		OriginalScanner scanner;
-		scanner.getLexicalInfo(lines, tokenVectorsForAllStatements, categoryVectorsForAllStatments);
-		scanner.displayLexicalInfo(tokenVectorsForAllStatements, categoryVectorsForAllStatments);
+		OriginalScanner::getLexicalInfo(lines, tokenVectorsForAllStatements, categoryVectorsForAllStatments);
+		OriginalScanner::displayLexicalInfo(tokenVectorsForAllStatements, categoryVectorsForAllStatments);
 	}
 }
 
