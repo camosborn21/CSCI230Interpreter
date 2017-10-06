@@ -541,6 +541,65 @@ void ProgramUI::getLexicalAnalysis()
 	}
 }
 
+void ProgramUI::runCalculator()
+{
+	//[10/2/2017 23:24] Cameron Osborn: Evaluates a single line arithmetic, logical, or relational equation entered by the user.
+	
+	cout << "Enter an arithmetic, relational, or logical statement on a single line and it will be evaluated or enter a single period '.' to cancel." << endl << endl;
+	string statement;
+	//[10/2/2017 23:56] Cameron Osborn: Get statement for evaluation or user signalled process cancellation.
+		while(statement == "")
+		{
+			getline(cin, statement);
+			if (statement == ".")
+				return;
+		}
+	
+		//[10/2/2017 23:56] Cameron Osborn: parse the statement into a token delineated infix expression.
+	expVector infixExp, postfixExp;
+	OriginalScanner::getPerLineTokenVectFromOneStringObject(statement, infixExp);
+
+	//[10/2/2017 23:57] Cameron Osborn: Display infix tokens
+	cout << endl << "The infix expression: " << statement << endl
+		<< "# of tokens in it: " << infixExp.size() << endl
+		<< "Tokens of this infix expression: " << endl;
+	for (expVector::iterator pos = infixExp.begin(); pos != infixExp.end(); ++pos)
+	{
+		//cout << "\t" << *pos << endl;
+		if (pos == infixExp.begin())
+			cout << "\t" << *pos;
+		else
+			cout << ", " << *pos;
+	}
+	cout << endl << endl;
+
+	//[10/2/2017 23:57] Cameron Osborn: Conduct infix to postfix conversion with validity check
+	if(!ExpressionEvaluator::infixToPostfixConversion(infixExp, postfixExp))
+	{
+		cout << "Invalid Expression" << endl;
+		return;
+	}
+
+	//[10/2/2017 23:58] Cameron Osborn: Display postfix expression.
+	cout << "# of tokens in the corresponding postfix expression: " << postfixExp.size() << endl << "Tokens of this postfix epxression: " << endl;
+	for(expVector::iterator pos = postfixExp.begin(); pos != postfixExp.end(); ++pos)
+	{
+		if (pos == postfixExp.begin())
+			cout << "\t" << *pos;
+		else
+			cout << ", " << *pos;
+	}
+	cout << endl << endl;
+
+	//[10/2/2017 23:58] Cameron Osborn: Evaluate expression and display result
+	floatVarValueTable varTable;
+	float expValue = 0;	
+	if (ExpressionEvaluator::postfixEvaluator(postfixExp, varTable, expValue))
+		cout << "The value of " << statement << " is " << expValue << endl;
+	else
+		cout << "Invalid Expression" << endl;
+}
+
 void ProgramUI::endOfService(const string service)
 {
 	//[9/16/2017 21:45] Cameron Osborn: Writes an output message for each action completion.
@@ -623,6 +682,8 @@ void ProgramUI::startInterface()
 		cout << "X. [DELETE]            Delete a range of existing lines." << endl;
 		cout << "R. [REPLACE]           Replace the contents of an existing line." << endl;
 		cout << endl;
+		cout << "1. [CALCULATOR]        Evaluate a single line statement."<<endl;
+		cout << endl;
 		cout << "G. [SHOW LEXICAL DATA] Returns an analysis of the lexical structure of the code." << endl;
 		cout << "P. [PARSE]             Parse and indent the code." << endl;
 		cout << "E. [EXECUTE]           Execute (run) the program." << endl;
@@ -694,6 +755,12 @@ void ProgramUI::startInterface()
 			cout << "[SAVE AS NEW]:" << endl;
 			saveProgramIntoFile();
 			endOfService("[SAVE CODE INTO A NEW FILE]");
+			break;
+
+		case '1':
+			cout << "[CALCULATOR]:" << endl;
+			runCalculator();
+			endOfService("[CALCULATOR]");
 			break;
 
 		case 'G': case 'g':

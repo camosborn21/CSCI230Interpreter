@@ -226,6 +226,23 @@ namespace CSCI230InterpreterUnitTesting
 			Assert::AreEqual(static_cast<float>(2), returnedValue);
 		}
 
+		//[10/2/2017 01:20] Cameron Osborn: Test addition between numeric literal and variable with expected result: z=8  z+4=12
+		//[10/5/2017 23:16] Cameron Osborn: Extrapolated assumption on success--Variables play well with numeric literals and further compatibility testing between the two is not required
+		TEST_METHOD(VariablesPlayNiceWithNumericLiterals)
+		{
+			//Arrange
+			const string rawExpressionString = "z+4";
+			expVector infixExp;
+			float returnedValue;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			ExpressionEvaluator::infixEvaluator(infixExp, varTable, returnedValue);
+
+			//Assert
+			Assert::AreEqual(static_cast<float>(12), returnedValue);
+		}
+
 
 		//[10/2/2017 01:29] Cameron Osborn: TEST RELATIONAL OPERATORS SECTION
 
