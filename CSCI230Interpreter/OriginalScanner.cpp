@@ -341,6 +341,7 @@ bool tokenInPhraseVector(const string & token, const vector<string> phraseVector
 {
 	return find(phraseVector.begin(), phraseVector.end(), token) != phraseVector.end();
 }
+
 bool OriginalScanner::isKEYWORD(const string & token)
 // Test whether it is a keyword of BIOLA, 
 // like function, read, display, if, else, return, while
@@ -404,6 +405,7 @@ bool OriginalScanner::isLOGICAL_OP(const string & token)
 }
 bool OriginalScanner::isSTRING_LITERAL(const string & token)
 {
+	//[10/10/2017 12:54] Cameron Osborn: Checks whether the token starts and ends with double quotes. If so it's a string literal.
 	if (token[0] == DOUBLE_QUOTE && token[token.size() - 1] == DOUBLE_QUOTE)
 		return true;
 
@@ -486,8 +488,11 @@ bool OriginalScanner::isCOMMENT(const string & token)
 void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & tokenVector, perLineCategoryVector & categoryVector)
 {
 	bool isComment = false;
+
+	//[10/10/2017 12:48] Cameron Osborn: for each token in the token vector for this line, determine its category using the above defined functions
 	for (perLineTokenVector::iterator itPLTV = tokenVector.begin(); itPLTV < tokenVector.end(); ++itPLTV)
 	{
+		//[10/10/2017 12:50] Cameron Osborn: If we haven't had the comment indicator for this statement check for each other type.
 		if (isComment == false) {
 			if (isKEYWORD(*itPLTV))
 				categoryVector.push_back(KEYWORD);
@@ -536,6 +541,7 @@ void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & toke
 																	else
 																		if (isCOMMENT(*itPLTV)) {
 																			categoryVector.push_back(COMMENT);
+																			//[10/10/2017 12:51] Cameron Osborn: If we see the comment indicator then each subsequent token will be COMMENT_TEXT.
 																			isComment = true;
 																		}
 																		else
@@ -543,6 +549,7 @@ void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & toke
 		}
 		else
 		{
+			//[10/10/2017 12:54] Cameron Osborn: We've already begun a comment in this statement so any following tokens are COMMENT_TEXT
 			categoryVector.push_back(COMMENT_TEXT);
 		}
 	}
@@ -568,9 +575,14 @@ void OriginalScanner::getCategoryVectorFromTokenVector(perLineTokenVector & toke
 //[9/22/2017 02:09] Cameron Osborn: This is the entry point to the whole class.
 void OriginalScanner::getLexicalInfo(const vector<string>& linesOfStatements, vectOfTokenVects & tokenVectors, vectOfCategoryVects & categoryVectors)
 {
+	//[10/10/2017 12:44] Cameron Osborn: Ensure our interpreter vectors are cleared
 	tokenVectors.clear();
 	categoryVectors.clear();
+
+	//[10/10/2017 12:45] Cameron Osborn: copy the program text to the class variable for the raw text
 	vector<string> statements = linesOfStatements;
+
+	//[10/10/2017 12:47] Cameron Osborn: For each line of the program, run the indiviual get tokens method and the get categories for found tokens method
 	for (vector<string>::iterator statement = statements.begin(); statement < statements.end(); ++statement)
 	{
 		perLineTokenVector T;
@@ -592,6 +604,7 @@ void OriginalScanner::getLexicalInfo(const vector<string>& linesOfStatements, ve
 //****************************************************************************
 void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOfCategoryVects & categoryVectors)
 {
+	//[10/10/2017 12:39] Cameron Osborn: Inconsistency between number of token lines and number of cateory lines within interpreted program; Escape with error message
 	if (tokenVectors.size() != categoryVectors.size())
 	{
 		cout << "# of token vectors inconsistent with # of category vectors." << endl;
@@ -603,6 +616,7 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 		perLineTokenVector tokenVect = tokenVectors[i];
 		perLineCategoryVector categoryVect = categoryVectors[i];
 
+		//[10/10/2017 12:39] Cameron Osborn: Inconsistency between number of tokens and number of cateories within line; Escape with error message
 		if (tokenVect.size() != categoryVect.size())
 		{
 			cout << "Line " << i
@@ -610,12 +624,14 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 			return;
 		}
 
+		//[10/10/2017 12:38] Cameron Osborn: Print line header
 		cout << endl
 			<< "***************************** "
 			<< "Lexical Info of Line " << i
 			<< "***************************** "
 			<< endl;
 
+		//[10/10/2017 12:37] Cameron Osborn: Get the string literal for category token enumerator
 		for (size_t j = 0; j < tokenVect.size(); j++)
 		{
 			string categoryInfo;
@@ -675,8 +691,9 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 			default:
 				categoryInfo = "UNKNOWN";
 			}
-			string tabAlignment;
 
+			//[10/10/2017 12:36] Cameron Osborn: This section ensures proper alignment for the category info.
+			string tabAlignment;
 			int tokenLength = tokenVect[j].length();
 			if (tokenLength >= 21)
 				tabAlignment = "\t";
@@ -689,6 +706,7 @@ void OriginalScanner::displayLexicalInfo(vectOfTokenVects & tokenVectors, vectOf
 					else
 						tabAlignment = "\t\t\t\t";
 
+			//[10/10/2017 12:40] Cameron Osborn: print token and token category
 			cout << "Token["
 				<< j
 				<< "]:"
