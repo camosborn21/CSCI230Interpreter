@@ -126,6 +126,8 @@ namespace CSCI230InterpreterUnitTesting
 			expectedVector.push_back(COMMENT);
 			expectedVector.push_back(COMMENT_TEXT);
 			expectedVector.push_back(COMMENT_TEXT);
+
+			//Test one must pass for test two to be valid because of functionality reuse.
 			OriginalScanner::getPerLineTokenVectFromOneStringObject(originalStatment, tokenVector);
 
 			//Act
