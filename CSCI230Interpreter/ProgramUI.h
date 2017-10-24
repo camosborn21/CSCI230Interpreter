@@ -7,16 +7,17 @@
 #include <vector>  //[9/13/2017 14:07] Cameron Osborn: include support of vector container
 #include <string> //[9/13/2017 14:07] Cameron Osborn: include support of new C++ string class
 #include "OriginalScanner.h" 
+#include "ExpressionEvaluator.h"
 using namespace std;
 
 class ProgramUI
 {
 private:
 	//[9/15/2017 23:13] Cameron Osborn: Holds true if there is a file loaded; used as gate check to certain functions.
-	bool fileLoaded;
+	bool fileLoaded = false;
 
 	//[9/17/2017 21:09] Cameron Osborn: Holds true if the UI is dirty; used as gate check to certain functions
-	bool uiDirty;
+	bool uiDirty = false;
 
 	//[9/15/2017 23:13] Cameron Osborn: Primery statement vector
 	vector<string> lines;
@@ -84,6 +85,9 @@ public:
 
 	//[9/23/2017 16:19] Cameron Osborn: Display the lexical analysis of the loaded program
 	void getLexicalAnalysis();
+
+	//[10/2/2017 23:05] Cameron Osborn: Run the single statement calculator
+	void runCalculator();
 
 	//[9/17/2017 22:16] Cameron Osborn: Offers user the chance to save, don't save, or cancel an action which would otherwise close the current document or quit the application. bool type procedure returns true if calling function should continue actions.
 	bool offerSaveContinueCancel();
