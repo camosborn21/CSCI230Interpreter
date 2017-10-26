@@ -27,6 +27,9 @@
     <ClInclude Include="..\CSCI230Interpreter\OriginalScanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tOriginalScanner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -39,6 +42,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tExpressionEvaluator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tOriginalScanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
