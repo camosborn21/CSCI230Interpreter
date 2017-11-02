@@ -4,10 +4,11 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "Interpreter.h"
 using namespace std;
-  typedef map<string, float> floatVarValueTable;
-//A variable table recording the names (strings) of variables
-//and the current floating point values of these variables
+//  typedef map<string, float> floatVarValueTable;
+////A variable table recording the names (strings) of variables
+////and the current floating point values of these variables
 
 typedef vector<string> expVector;
 //An expression vector is a vector of token strings 

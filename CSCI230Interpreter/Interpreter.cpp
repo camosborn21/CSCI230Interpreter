@@ -6,15 +6,16 @@
 //Template
 //	Parse lines to statements
 //	Check Syntax
+//		Display Syntax Errors
 //	Execute statements 1 line at a time
 //		read
 //		display
 //		assignment
-Interpreter::Interpreter()
-{
-}
-
-
-Interpreter::~Interpreter()
-{
-}
+//Interpreter::Interpreter()
+//{
+//}
+//
+//
+//Interpreter::~Interpreter()
+//{
+//}

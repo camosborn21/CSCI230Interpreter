@@ -8,6 +8,7 @@
 #include <string> //[9/13/2017 14:07] Cameron Osborn: include support of new C++ string class
 #include "OriginalScanner.h" 
 #include "ExpressionEvaluator.h"
+#include "Interpreter.h"
 using namespace std;
 
 class ProgramUI
