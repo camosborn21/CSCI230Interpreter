@@ -59,6 +59,21 @@ namespace CSCI230InterpreterUnitTesting
 			Assert::IsFalse(result);
 
 		}
+
+		TEST_METHOD(RightDoubleParenFailsWithSingleLeftParen)
+		{
+			//Arrange
+			const string rawExpressionString = "(8+4))";
+			expVector infixExp, postfixExp;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			bool result = ExpressionEvaluator::infixToPostfixConversion(infixExp, postfixExp);
+
+			//Assert
+			Assert::IsFalse(result);
+
+		}
 		//[10/2/2017 01:21] Cameron Osborn: Test that an equation with correctly paired parentheses evaluates with expected result: ((8+4)) = 12
 		TEST_METHOD(EquationWithParenthesesEvaluates)
 		{
