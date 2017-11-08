@@ -29,6 +29,24 @@ namespace CSCI230InterpreterUnitTesting
 			varTable["y"] = 7;
 			varTable["z"] = 8;
 		}
+
+		//[11/7/2017 13:04] Cameron Osborn: Test that a set of parenthesis with first character operator will result in invalid expression. Test case found by Zach Leonard. Such that: 1(*3)+4 results in invalid expression. Current architecture results in valid evaluation to 7.
+		TEST_METHOD(OpenParenWithOperatorResultsInInvalidExpression) {
+			//Arrange
+			const string rawExpressionString = "1(*3)+4";
+			expVector infixExp,expVector;
+
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+			//float returnedValue;
+
+			//Act
+			bool result = ExpressionEvaluator::infixToPostfixConversion(infixExp, expVector);
+
+			//Assert
+			Assert::IsFalse(result);
+		}
+
+
 		//[10/2/2017 01:22] Cameron Osborn: Test that a valid, complex infix expression with numeric literals and arithmetic operators evaluates correctly with expected result: 5.0+3.0*(7.0-(4.0/(1.0+2.0))) = 22
 		TEST_METHOD(ValidExpressionEvaluatesCorrectly)
 		{
@@ -49,6 +67,21 @@ namespace CSCI230InterpreterUnitTesting
 		{
 			//Arrange
 			const string rawExpressionString = "8+4)";
+			expVector infixExp, postfixExp;
+			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
+
+			//Act
+			bool result = ExpressionEvaluator::infixToPostfixConversion(infixExp, postfixExp);
+
+			//Assert
+			Assert::IsFalse(result);
+
+		}
+
+		TEST_METHOD(RightDoubleParenFailsWithSingleLeftParen)
+		{
+			//Arrange
+			const string rawExpressionString = "(8+4))";
 			expVector infixExp, postfixExp;
 			OriginalScanner::getPerLineTokenVectFromOneStringObject(rawExpressionString, infixExp);
 

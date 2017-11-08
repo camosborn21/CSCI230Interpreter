@@ -230,15 +230,22 @@ bool ExpressionEvaluator::infixToPostfixConversion(const expVector & infixExp, e
 			//[9/28/2017 21:35] Cameron Osborn: If we encounter a right parenthesis then in a valid expression it's been preceded by a left paren.
 			// scan backward through the stack looking for that open paren. Each non left paren should be pushed to the post fix vector.
 			
+			//[9/28/2017 21:31] Cameron Osborn: No elements in vector. Invalid expression.
+			if (stackVect.empty())
+				return false;
+
 			while (stackVect.back() != "(")
 			{
 
 				//[9/28/2017 21:33] Cameron Osborn: Pass each non left parenthesis token to the postfix expression then pop it from the stack
 				postfixExp.push_back(stackVect.back());
 				stackVect.pop_back();
-				if (stackVect.size() == 0)
-					//[9/28/2017 21:31] Cameron Osborn: No elements in vector. Invalid expression.
-					return false;			
+
+				//[9/28/2017 21:31] Cameron Osborn: No elements in vector. Invalid expression.
+				if (stackVect.empty())
+					return false;
+			
+			
 			}
 
 			//[9/28/2017 21:33] Cameron Osborn: Now pop the left parenthesis from the stack.
