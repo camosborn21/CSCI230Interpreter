@@ -140,6 +140,9 @@
   <ItemGroup>
     <ClInclude Include="ExpressionEvaluator.h" />
     <ClInclude Include="FlowStackElement.h" />
+    <ClInclude Include="FlowStackIfElement.h" />
+    <ClInclude Include="FlowStackMethodElement.h" />
+    <ClInclude Include="FlowStackWhileElement.h" />
     <ClInclude Include="Interpreter.h" />
     <ClInclude Include="OriginalScanner.h" />
     <ClInclude Include="ProgramUI.h" />
@@ -150,6 +153,9 @@
     <ClCompile Include="CSCI230Interpreter.cpp" />
     <ClCompile Include="ExpressionEvaluator.cpp" />
     <ClCompile Include="FlowStackElement.cpp" />
+    <ClCompile Include="FlowStackIfElement.cpp" />
+    <ClCompile Include="FlowStackMethodElement.cpp" />
+    <ClCompile Include="FlowStackWhileElement.cpp" />
     <ClCompile Include="Interpreter.cpp" />
     <ClCompile Include="OriginalScanner.cpp" />
     <ClCompile Include="ProgramUI.cpp" />

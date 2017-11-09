@@ -1,11 +1,13 @@
 ﻿#pragma once
 #include <string>
 #include "Interpreter.h"
+
+using namespace std;
 class FlowStackElement
 {
 public:
 	vector<SourceCodeToken> statement;
-	std::string serial;
-	void execute();
+	string serial;
+	void execute(floatVarValueTable &numericVariables, stringVarValueTable &stringVariables);
 
 };
