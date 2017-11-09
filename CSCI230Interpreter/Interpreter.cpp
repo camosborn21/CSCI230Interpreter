@@ -22,8 +22,8 @@ void Interpreter::execute()
 
 void Interpreter::parseSourceCode(vector<string> lines, bool displayErrorsAfterParse, bool executeAfterParse)
 {
-	if (lines.size > 0) {
-		OriginalScanner::getLexicalInfo(lines, tokenVectorsForAllLines, categoryVectorsForAllLines);
-	}
+	if (lines.size == 0) {
 
+	}
+	OriginalScanner::getLexicalInfo(lines, tokenVectorsForAllLines, categoryVectorsForAllLines);
 }
