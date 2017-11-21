@@ -29,6 +29,14 @@ struct SourceCodeToken {
 	tokenCategory Category;
 	int LineNumber;
 	int TokenNumber;
+
+	SourceCodeToken(string token, tokenCategory category, int lineNumber, int tokenNumber)
+	{
+		Token = token;
+		Category = category;
+		LineNumber = lineNumber;
+		TokenNumber = tokenNumber;
+	}
 };
 
 struct Statement {
@@ -54,8 +62,14 @@ public:
 
 	//[11/2/2017 12:46] Cameron Osborn: Entry point for class. Method exposes options to display errors or run code after all statements have been parsed.
 	void parseSourceCode(vector<string> lines, bool displayErrorsAfterParse, bool executeAfterParse);
+	
 
 
+	//[11/21/2017 01:46] Cameron Osborn: This procedure verifies that the number of tokens in a perLineTokenVector match the total number of categories in a perLineCategoryVector. On fail it will print a parsing error to the output.
+	bool checkTokenVsCategoryLengthParsingError(perLineTokenVector checkTokenVect, perLineCategoryVector checkCategoryVect, int lineNumber);
+
+	//[11/21/2017 01:49] Cameron Osborn: Check whether the source code has seperate functions or all statements are part of a nameless main function.
+	bool checkSourceCodeContainsFunctions();
 };
 
 #endif
