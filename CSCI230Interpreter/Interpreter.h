@@ -73,6 +73,8 @@ public:
 	//[11/2/2017 12:46] Cameron Osborn: Entry point for class. Method exposes options to display errors or run code after all statements have been parsed.
 	void parseSourceCode(vector<string> lines, bool displayErrorsAfterParse, bool executeAfterParse);
 
+	//[11/25/2017 14:43] Cameron Osborn: After code parsing, validate that there are no syntax errors in the code.
+	void checkSyntax();
 
 };
 

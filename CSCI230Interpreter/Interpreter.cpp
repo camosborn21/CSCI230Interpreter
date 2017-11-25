@@ -28,25 +28,54 @@ void Interpreter::parseSourceCode(vector<string> lines, bool displayErrorsAfterP
 		OriginalScanner::getLexicalInfo(lines, tokenVectorsForAllLines, categoryVectorsForAllLines);
 	}
 
-	//[11/25/2017 14:14] Cameron Osborn: Convert statements to source code tokens for ease of use and filter out comments
+	//[11/21/2017 01:26] Cameron Osborn: For Each Line convert the token vector and category vector data into SourceCodeToken class objects and filter out comments.
 	Statement currentStatement;
-	for (size_t i=0; i<tokenVectorsForAllLines.size();i++)
+	for (size_t i = 0; i < tokenVectorsForAllLines.size(); i++)
 	{
 		if (currentStatement.Tokens.size() > 0)
 		{
 			statements.push_back(currentStatement);
 			currentStatement.Tokens.clear();
 		}
-		if (tokenVectorsForAllLines[i].size() != categoryVectorsForAllLines[i].size())
+		perLineTokenVector tokenVect = tokenVectorsForAllLines[i];
+		perLineCategoryVector categoryVect = categoryVectorsForAllLines[i];
+
+		//[11/21/2017 01:45] Cameron Osborn: check parsing validity of current line
+		if (tokenVect.size() != categoryVect.size())
 		{
-			cout << "Line " << i << ": # of tokens inconsisten with # of category labels." << endl;
+			cout << "Line " << i
+				<< ": # of tokens inconsistent with # of category labels." << endl;
 			return;
 		}
 
-		for (size_t j=0; j<tokenVectorsForAllLines[i].size(); j++)
+		//[11/21/2017 02:14] Cameron Osborn: for each token: create source code token.
+		for (size_t j = 0; j < tokenVect.size(); j++)
 		{
-			
+			//[11/24/2017 19:38] Cameron Osborn: Filter out comments and comment text so it doesn't interfere with parsing.
+			if (categoryVect[j] != COMMENT || categoryVect[j] != COMMENT_TEXT)
+				currentStatement.Tokens.push_back(SourceCodeToken(tokenVect[j], categoryVect[j], i, j));
 		}
+	}
+	checkSyntax();
 
+}
+
+void Interpreter::checkSyntax()
+{
+	
+	for(vector<Statement>::iterator iter = statements.begin(); iter<statements.end(); ++iter)
+	{
+		for(vector<SourceCodeToken>::iterator token = iter->Tokens.begin(); token<iter->Tokens.end(); ++token)
+		{
+			//[11/25/2017 14:47] Cameron Osborn: First token must be either 'display', 'read', or ID_NAME
+			if(token==iter->Tokens.begin())
+			{
+				
+			}
+			else
+			{
+				//[11/25/2017 14:48] Cameron Osborn: now we're on subsequent tokens
+			}
+		}
 	}
 }
