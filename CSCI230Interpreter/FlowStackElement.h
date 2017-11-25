@@ -5,9 +5,17 @@
 using namespace std;
 class FlowStackElement
 {
+private:
+	
 public:
+	FlowStackElement();
+	virtual ~FlowStackElement() = default;
 	vector<SourceCodeToken> statement;
-	string serial;
-	void execute(floatVarValueTable &numericVariables, stringVarValueTable &stringVariables);
-
+	unsigned short** serial;
+	virtual void execute(floatVarValueTable &numericVariables, stringVarValueTable &stringVariables);
+	virtual string Type();
+	virtual void pushStatement(FlowStackElement pushStatement, bool isFinalElement) ;
+	floatVarValueTable blockFloatVariables;
+	stringVarValueTable blockStringVariables;
+	bool isMultilineCompound;
 };

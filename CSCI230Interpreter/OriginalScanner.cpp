@@ -451,6 +451,8 @@ bool OriginalScanner::isSEMICOLON(const string & token)
 	else
 		return false;
 }
+
+//[11/24/2017 19:46] Cameron Osborn: WHEN IS THIS ALLOWED IN THE BIOLA PROGRAMMING LANGUAGE????
 bool OriginalScanner::isCOLON(const string & token)
 // Test whether it is a colon :
 {

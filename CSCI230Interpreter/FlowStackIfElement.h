@@ -6,6 +6,10 @@ class FlowStackIfElement :
 public:
 	vector<FlowStackElement> IfStatements;
 	vector<FlowStackElement> ElseStatements;
-	void execute(floatVarValueTable &numericVariables, stringVarValueTable &stringVariables);
+	void execute(floatVarValueTable &numericVariables, stringVarValueTable &stringVariables) override;
+	void pushStatement(FlowStackElement pushStatement, bool isFinalElement) override;
+	~FlowStackIfElement() = default;
+	string Type() override;
+	bool ifSegmentComplete;
 };
 

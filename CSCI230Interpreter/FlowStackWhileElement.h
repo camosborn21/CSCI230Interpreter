@@ -5,6 +5,9 @@ class FlowStackWhileElement :
 {
 public:
 	vector<FlowStackElement> loopingStatements;
-	void execute(floatVarValueTable &numericVariables, stringVarValueTable &stringVariables);
+	 void execute(floatVarValueTable &numericVariables, stringVarValueTable &stringVariables) override;
+	 void pushStatement(FlowStackElement pushStatement, bool isFinalElement) override;
+	~FlowStackWhileElement() = default;
+	string Type() override;
 };
 
