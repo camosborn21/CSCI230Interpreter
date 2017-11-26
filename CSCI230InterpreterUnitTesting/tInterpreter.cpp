@@ -343,7 +343,7 @@ namespace CSCI230InterpreterUnitTesting
 			//Assert
 			Assert::IsFalse(terp.BuildStatus);
 			//[11/26/2017 04:18] Cameron Osborn: Must throw 2 errors. Missing semicolon on end of statement and read statement not three tokens long.
-			Assert::AreEqual(1, terp.GetErrorCount());
+			Assert::AreEqual(2, terp.GetErrorCount());
 
 			//Arrange
 			vector<string>testCase3;
