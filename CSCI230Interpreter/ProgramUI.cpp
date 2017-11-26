@@ -519,6 +519,29 @@ bool ProgramUI::offerSaveContinueCancel()
 	return true;
 }
 
+void ProgramUI::buildProgram()
+{
+	if(checkStatementsInBuffer())
+	{
+		terp.parseSourceCode(lines, true, false);
+	}else
+	{
+		cout << "Cannot build program. No statements have been loaded or created in the current file.";
+	}
+}
+
+void ProgramUI::executeProgram()
+{
+	if(checkStatementsInBuffer())
+	{
+		terp.parseSourceCode(lines, true, true);
+	}
+	else
+	{
+		cout << "Cannot build program. No statements have been loaded or created in the current file.";
+	}
+}
+
 
 void ProgramUI::closeCurrentDocument() {
 	//[9/17/2017 21:59] Cameron Osborn: Clear all factors pertaining to currently loaded document.
@@ -686,7 +709,8 @@ void ProgramUI::startInterface()
 		cout << endl;
 		cout << "G. [SHOW LEXICAL DATA] Returns an analysis of the lexical structure of the code." << endl;
 		cout << "P. [PARSE]             Parse and indent the code." << endl;
-		cout << "E. [EXECUTE]           Execute (run) the program." << endl;
+		cout << "B. [BUILD]             Build the application and display any error messages." << endl;
+		cout << "E. [EXECUTE]           Build and execute (run) the program." << endl;
 		cout << "T. [TOGGLE]            Toggle the execution debug mode." << endl;
 		cout << HorizontalRule << endl << endl;
 		cout << "Your choice is: ";
@@ -775,9 +799,16 @@ void ProgramUI::startInterface()
 			endOfService("[PARSE AND INDENT SOURCE CODE]");
 			break;
 
+		case 'B': case 'b':
+			cout << "[BUILD PROGRAM]:" << endl;
+			buildProgram();
+			endOfService("[BUILD PROGRAM]");
+			break;
+
+
 		case 'E': case 'e':
 			cout << "[EXECUTE TO RUN PROGRAM]:" << endl;
-			cout << InvalidOperationFunctionNotYetProgrammed;
+			executeProgram();
 			endOfService("[EXECUTE TO RUN PROGRAM]");
 			break;
 

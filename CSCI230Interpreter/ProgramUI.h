@@ -14,6 +14,9 @@ using namespace std;
 class ProgramUI
 {
 private:
+	//[11/25/2017 21:55] Cameron Osborn: Holds the interpreter/executor class for the whole program.
+	Interpreter terp;
+
 	//[9/15/2017 23:13] Cameron Osborn: Holds true if there is a file loaded; used as gate check to certain functions.
 	bool fileLoaded = false;
 
@@ -92,6 +95,12 @@ public:
 
 	//[9/17/2017 22:16] Cameron Osborn: Offers user the chance to save, don't save, or cancel an action which would otherwise close the current document or quit the application. bool type procedure returns true if calling function should continue actions.
 	bool offerSaveContinueCancel();
+
+	//[11/25/2017 21:52] Cameron Osborn: parse the program code and validate the syntax. Print results of build to output.
+	void buildProgram();
+
+	//[11/26/2017 00:42] Cameron Osborn: parse program code, validate the syntax, and execute code if there are no errors. Display errors on fail.
+	void executeProgram();
 
 	//[9/13/2017 15:04] Cameron Osborn: This function serves as the central place to access all the services provided by the interpreter including the functions listed above
 	void startInterface();

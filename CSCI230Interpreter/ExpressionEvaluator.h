@@ -1,12 +1,15 @@
 #ifndef EXP_EVALUATOR_H
 #define EXP_EVALUATOR_H
-
-#include <map>
+#include<utility>
 #include <string>
+#include <map>
+
 #include <vector>
-#include "Interpreter.h"
+
+
 using namespace std;
-//  typedef map<string, float> floatVarValueTable;
+
+typedef map<string, float> floatVarValueTable;
 ////A variable table recording the names (strings) of variables
 ////and the current floating point values of these variables
 
