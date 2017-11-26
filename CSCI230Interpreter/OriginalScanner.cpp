@@ -360,13 +360,12 @@ bool OriginalScanner::isASSIGNMENT_OP(const string & token)
 }
 bool OriginalScanner::isID_NAME(const string & token)
 {
-	// Testwhether it is an identifier, i.e. names of variables, labels, and functions
+	// Test whether it is an identifier, i.e. names of variables, labels, and functions
 	//one letter plus any number of alphanumerical characters
 
 	//[9/21/2017 23:58] Cameron Osborn: if first character is not alpha then not ID_NAME
 	if (!isalpha(token[0]))
 		return false;
-
 
 	//[9/21/2017 23:58] Cameron Osborn: if any subsequent characters are not alphanumeric then not ID_NAME
 	//test from second character in string because first character was determined to be alpha above.
@@ -376,10 +375,9 @@ bool OriginalScanner::isID_NAME(const string & token)
 		if (!isalnum(c))
 			return false;
 	}
-
-
 	return true;
 }
+
 bool OriginalScanner::isNUMERICAL_OP(const string & token)
 {
 	// Test whether it is one of the following

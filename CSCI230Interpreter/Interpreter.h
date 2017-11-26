@@ -145,6 +145,8 @@ public:
 	//[11/26/2017 01:51] Cameron Osborn: returns quantity of errors statement. ie "(1 error)" or "(3 errors)"
 	string GetErrorQuantityStatement();
 
+	int GetVariableCount() const;
+
 	//[11/26/2017 01:55] Cameron Osborn: Accessor for errors.size value.
 	int GetErrorCount() const;
 

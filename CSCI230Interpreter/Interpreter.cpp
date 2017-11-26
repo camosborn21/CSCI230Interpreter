@@ -1,18 +1,8 @@
 #include "stdafx.h"
 #include "Interpreter.h"
 #include <iostream>
-//#include "ExpressionEvaluator.h"
-using namespace std;
-//Convert source program lines to execution statements to allow multiline statements or multiple statements per line.
 
-//Template
-//	Parse lines to statements
-//	Check Syntax
-//		Display Syntax Errors
-//	Execute statements 1 line at a time
-//		read
-//		display
-//		assignment
+using namespace std;
 
 string Interpreter::GetErrorQuantityStatement()
 {
@@ -24,11 +14,17 @@ string Interpreter::GetErrorQuantityStatement()
 	return result;
 }
 
+int Interpreter::GetVariableCount() const
+{
+	return varTable.size();
+}
+
 int Interpreter::GetErrorCount() const
 {
 	return errors.size();
 }
 
+//[11/26/2017 02:23] Cameron Osborn: display only. no testable code.
 void Interpreter::printErrors()
 {
 	//[11/26/2017 00:29] Cameron Osborn: If there are no errors, print that the build was successful
@@ -37,7 +33,7 @@ void Interpreter::printErrors()
 	else
 	{
 		//[11/26/2017 00:29] Cameron Osborn: There are build errors, iterate through each one and display the message.
-		cout << endl << endl << "THERE WERE BUILD ERRORS" << endl << "Error Summary" + GetErrorQuantityStatement() +": " << endl;
+		cout << endl << endl << "THERE WERE BUILD ERRORS" << endl << "Error Summary" + GetErrorQuantityStatement() + ": " << endl;
 		for (Error error : errors)
 		{
 			error.printError();
@@ -45,40 +41,55 @@ void Interpreter::printErrors()
 	}
 }
 
+//[11/26/2017 02:23] Cameron Osborn: ui interact required. not currently unit testable.
 void Interpreter::execute()
 {
 	//[11/25/2017 21:58] Cameron Osborn: no need to check build status as this routine is only called by the parseSourceCode method which will prevent the call if there are build errors.
 
+	//[11/26/2017 02:25] Cameron Osborn: For each statement in the parsed source code
 	for (Statement statement : statements)
 	{
-		if(statement.StatementType=="display")
-		{
+		//[11/26/2017 02:25] Cameron Osborn: Determine StatementType: display, read, or assignment.
+		if (statement.StatementType == "display")
+		{//[11/26/2017 02:25] Cameron Osborn: if display then
+			//[11/26/2017 02:26] Cameron Osborn: Insert new line
 			cout << endl;
-			vector<SourceCodeToken>::iterator iter=statement.Tokens.begin() + 1;
+
+			//[11/26/2017 02:26] Cameron Osborn: for each token following the keyword "display"
+			vector<SourceCodeToken>::iterator iter = statement.Tokens.begin() + 1;
+
 			//[11/26/2017 00:49] Cameron Osborn: display all statements except the semicolon at the end
-			while (iter < statement.Tokens.end()-1)
+			while (iter < statement.Tokens.end() - 1)
 			{
+
+				//[11/26/2017 02:27] Cameron Osborn: Comma is the display concatonator in this language, skip commas outside of string literals
 				if (iter->Category != COMMA) {
+
+					//[11/26/2017 02:27] Cameron Osborn: if it's a string literal, print out all but the enclosing double quote marks.
 					if (iter->Category == STRING_LITERAL)
 					{
-						cout << (iter->Token).substr(1,iter->Token.size()-2);
-					} else
+						cout << (iter->Token).substr(1, iter->Token.size() - 2);
+					}
+					else
 					{
-						//[11/25/2017 23:43] Cameron Osborn: Assume anything that's not a string literal or a comma to be an infix expression which requires evaluation. Even if it's a single value it will return fine from the expression evaluator.
+						//[11/25/2017 23:43] Cameron Osborn: Assume anything that's not a string literal or a comma to be an infix expression which requires evaluation. Even if it's a single value or variable name it will return fine from the expression evaluator.
 						float resultValue;
 						vector<string> tempInfix;
 
 						//[11/25/2017 23:51] Cameron Osborn: for each token between here and the next comma or the end of statement (;), add to the temporary infix vector.
-						while(iter->Category!=COMMA && iter->Category != SEMICOLON)
+						while (iter->Category != COMMA && iter->Category != SEMICOLON)
 						{
 							tempInfix.push_back(iter->Token);
 							++iter;
 						}
-						if(ExpressionEvaluator::infixEvaluator(tempInfix,varTable,resultValue))
+
+						//[11/26/2017 02:28] Cameron Osborn: Once the tempInfix vector has been built, evaluate it
+						if (ExpressionEvaluator::infixEvaluator(tempInfix, varTable, resultValue))
 						{
 							//[11/25/2017 23:51] Cameron Osborn: Valid expression evaluation. Print to output
 							cout << resultValue;
-						}else
+						}
+						else
 						{
 							//[11/25/2017 23:48] Cameron Osborn: invalid expression passed to evaluator.
 							cout << endl << "Runtime error: Expression could not be evaluated.";
@@ -90,52 +101,55 @@ void Interpreter::execute()
 			}
 		}
 		else {
+			//[11/26/2017 02:29] Cameron Osborn: If the statement type is a 'read' statement.
 			if (statement.StatementType == "read")
 			{
 				//[11/25/2017 22:12] Cameron Osborn: get Variable name
 				string varName = statement.Tokens[1].Token;
+
+				//[11/26/2017 02:30] Cameron Osborn: Get the input from user
 				string tempVar;
 				cout << endl;
 				getline(cin, tempVar);
-				if(OriginalScanner::isNUMERICAL_LITERAL(tempVar))
+
+				//[11/26/2017 02:30] Cameron Osborn: validate user input !!!Check for runtime error of non-float value input by user.
+				if (OriginalScanner::isNUMERICAL_LITERAL(tempVar))
 				{
-
 					//[11/25/2017 22:12] Cameron Osborn: insert or assign the value of the variable in the table.
-					varTable.insert_or_assign(varName,stof(tempVar));
+					varTable.insert_or_assign(varName, stof(tempVar));
 
-
-					/*floatVarValueTable::iterator varTableIterator = varTable.find(varName);
-					if(varTableIterator==varTable.end())
-					{
-						varTable.insert()
-					}else
-					{
-						
-					}*/
-				} else
+				}
+				else
 				{
 					//[11/25/2017 22:15] Cameron Osborn: A non-float value was entered by the user.
 					cout << endl << "Runtime Error: Invalid value for variable " + varName + ". Code execution will stop.";
 					return;
 				}
 			}
-			else {
+			else { //[11/26/2017 02:30] Cameron Osborn: If the statement type is an 'assignment' statement.
 				if (statement.StatementType == "assignment")
 				{
+					//[11/26/2017 02:31] Cameron Osborn: get variable name for assinment.
 					string varName = statement.Tokens[0].Token;
+
+					//[11/26/2017 02:31] Cameron Osborn: Create the infix vector using all tokens after the assignment operator (=).
 					vector<string> infixString;
-					float resultValue;
-					for(int i=2;i<statement.Tokens.size()-1;i++)
+					for (int i = 2; i < statement.Tokens.size() - 1; i++)
 					{
 						infixString.push_back(statement.Tokens[i].Token);
 					}
+
+					//[11/26/2017 02:32] Cameron Osborn: Evaluate the expression retrieved in the infix vector.
+					float resultValue;
 					if (ExpressionEvaluator::infixEvaluator(infixString, varTable, resultValue))
 					{
+						//[11/26/2017 02:32] Cameron Osborn: Valid evaluation of infix vector
 						varTable.insert_or_assign(varName, resultValue);
-					}else
+					}
+					else
 					{
 						//[11/25/2017 22:23] Cameron Osborn: Invalid expression detected by evaluator.
-						cout << endl <<  "Runtime error: Expression could not be evaluated.";
+						cout << endl << "Runtime error: Expression could not be evaluated.";
 					}
 				}
 				else {
@@ -149,6 +163,7 @@ void Interpreter::execute()
 	}
 }
 
+
 void Interpreter::parseSourceCode(vector<string> lines, bool displayErrorsAfterParse, bool executeAfterParse)
 {
 	//[11/25/2017 21:42] Cameron Osborn: Clear errors vector to begin parse and syntax check.
@@ -158,22 +173,26 @@ void Interpreter::parseSourceCode(vector<string> lines, bool displayErrorsAfterP
 	tokenVectorsForAllLines.clear();
 	categoryVectorsForAllLines.clear();
 	statements.clear();
-	//[11/25/2017 14:13] Cameron Osborn: Get lexical analysis of all statements in program
 
+
+	//[11/25/2017 14:13] Cameron Osborn: Get lexical analysis of all statements in program
 	OriginalScanner::getLexicalInfo(lines, tokenVectorsForAllLines, categoryVectorsForAllLines);
 
 	//[11/21/2017 01:26] Cameron Osborn: For Each Line convert the token vector and category vector data into SourceCodeToken class objects and filter out comments.
 	Statement currentStatement;
 	for (size_t i = 0; i < tokenVectorsForAllLines.size(); i++)
 	{
+		//[11/26/2017 02:35] Cameron Osborn: If we're at the beginning of a new line and haven't already pushed the former statement onto the program stack, do so now.
 		if (currentStatement.Tokens.size() > 0)
 		{
 			statements.push_back(currentStatement);
 			currentStatement.Tokens.clear();
 		}
+
+		//[11/26/2017 02:36] Cameron Osborn: get the current line tokens and categories
 		perLineTokenVector tokenVect = tokenVectorsForAllLines[i];
 		perLineCategoryVector categoryVect = categoryVectorsForAllLines[i];
-		
+
 		//[11/21/2017 01:45] Cameron Osborn: check parsing validity of current line
 		if (tokenVect.size() != categoryVect.size())
 		{
@@ -189,14 +208,21 @@ void Interpreter::parseSourceCode(vector<string> lines, bool displayErrorsAfterP
 			if (categoryVect[j] != COMMENT && categoryVect[j] != COMMENT_TEXT)
 				currentStatement.Tokens.push_back(SourceCodeToken(tokenVect[j], categoryVect[j], i, j));
 		}
+
+		statements.push_back(currentStatement);
+		currentStatement.Tokens.clear();
 	}
+
+	//[11/26/2017 02:36] Cameron Osborn: Once all lines have been normalized, check for syntax errors.
 	checkSyntax();
 
+	//[11/26/2017 02:37] Cameron Osborn: After syntax check, set resultant status.
 	if (errors.size() != 0)
-		BuildStatus = false;
+		BuildStatus = false; //[11/26/2017 02:37] Cameron Osborn: There are build errors
 	else
-		BuildStatus = true;
+		BuildStatus = true; //[11/26/2017 02:37] Cameron Osborn: No errors. Build successful
 
+	//[11/26/2017 02:37] Cameron Osborn: parameter option fulfillment to execute code or display errors after code has been parsed.
 	if (executeAfterParse)
 	{
 		if (BuildStatus)
@@ -215,34 +241,45 @@ void Interpreter::parseSourceCode(vector<string> lines, bool displayErrorsAfterP
 
 void Interpreter::checkSyntax()
 {
-	floatVarValueTable::iterator pos;
+
 	//[11/25/2017 20:37] Cameron Osborn: clear the variable table. It will be built by the syntax check to ensure variables are declared and used in the proper order.
 	varTable.clear();
-	int tokenIndex = 0;
+
+
+	//[11/26/2017 02:41] Cameron Osborn: For all statements in the parsed program.
 	for (vector<Statement>::iterator iter = statements.begin(); iter < statements.end(); ++iter)
 	{
-		tokenIndex = 0;
+		//[11/26/2017 02:39] Cameron Osborn: keeps track of iterator position by index #. Used to nab next token at the beginning of each subsequent iteration.
+		int tokenIndex = 0;
+
+		//[11/26/2017 02:45] Cameron Osborn: For each token within the iter statement.
 		for (vector<SourceCodeToken>::iterator token = iter->Tokens.begin(); token < iter->Tokens.end(); ++token, tokenIndex++)
 		{
+			//[11/26/2017 02:47] Cameron Osborn: if the current token is not the last token of the statement then pick up the next SourceCodeToken to use in evaluation.
 			SourceCodeToken nextToken;
-
 			if (tokenIndex + 1 < iter->Tokens.size())
 				nextToken = iter->Tokens[tokenIndex + 1];
 
-			//[11/25/2017 14:47] Cameron Osborn: First token must be either 'display', 'read', or ID_NAME
+			//[11/26/2017 02:48] Cameron Osborn: if we're on the first token of the statement.
 			if (token == iter->Tokens.begin())
 			{
+				//[11/25/2017 14:47] Cameron Osborn: First token must be either 'display', 'read', or ID_NAME
+				//[11/26/2017 04:08] Cameron Osborn: TestCovered
 				checkTokenValidAtBeginningOfStatement(*token);
+
+
 				if (token->Category == ID_NAME)
 				{
 					iter->StatementType = "assignment";
 					//[11/25/2017 15:04] Cameron Osborn: this is an assignment operation. Next token must be ASSIGNMENT_OP
+					//[11/26/2017 04:08] Cameron Osborn: TestCovered
 					if (nextToken.Category != ASSIGNMENT_OP)
 					{
-						errors.push_back(Error("Invalid assignment operation: Variable name must be followed by assignment operator", token->LineNumber+1, token->TokenNumber + 1));
+						errors.push_back(Error("Invalid assignment operation: Variable name must be followed by assignment operator", token->LineNumber + 1, token->TokenNumber + 1));
 					}
 
 					//[11/25/2017 21:18] Cameron Osborn: chcek that variable name is in varTable. If not then add it.
+					//[11/26/2017 04:08] Cameron Osborn: TestCovered
 					if (varTable.find(token->Token) == varTable.end())
 					{
 						varTable.insert(make_pair(token->Token, 0));
@@ -250,30 +287,35 @@ void Interpreter::checkSyntax()
 
 				}
 
+
 				if (token->Category == KEYWORD&&token->Token == "read")
 				{
 					iter->StatementType = "read";
 					//[11/25/2017 15:08] Cameron Osborn: read operation. Next token must be ID_NAME
+					//[11/26/2017 04:12] Cameron Osborn: TestCovered
 					if (nextToken.Category != ID_NAME)
 					{
 						errors.push_back(Error("Invalid read operation: the 'read' keyword must be followed by a variable name.", token->LineNumber + 1, token->TokenNumber + 1));
 					}
 					else
 					{
-						//[11/25/2017 21:18] Cameron Osborn: chcek that variable name is in varTable. If not then add it.
+						//[11/25/2017 21:18] Cameron Osborn: check that variable name is in varTable. If not then add it.
+						//[11/26/2017 04:16] Cameron Osborn: TestCovered
 						if (varTable.find(nextToken.Token) == varTable.end())
 						{
 							varTable.insert(make_pair(nextToken.Token, 0));
 						}
 					}
+
+					//[11/26/2017 04:20] Cameron Osborn: The read operation must be exactly three tokens long. the 'read' keyword token, the IDName variable token, and the semicolon at the end. Any more or less should throw errors.
+					//[11/26/2017 04:20] Cameron Osborn: TestCovered
 					if (iter->Tokens.size() != 3)
 					{
-						errors.push_back(Error("Invalid read operation: the 'read' operation can only contain the read keyword, a variable name, and the statement terminating semi-colon.", token->LineNumber + 1, token->TokenNumber + 1));
+						errors.push_back(Error("Invalid read operation: the 'read' operation can only contain the read keyword, a variable name, and the statement-terminating semicolon.", token->LineNumber + 1, token->TokenNumber + 1));
 					}
-
-
 				}
 
+				//[11/26/2017 04:22] Cameron Osborn: LEFT OFF HERE WITH CODE COVERAGE CHECKS
 				if (token->Category == KEYWORD && token->Token == "display")
 				{
 					iter->StatementType = "display";
@@ -286,10 +328,8 @@ void Interpreter::checkSyntax()
 				}
 
 			}
-			else
+			else //[11/25/2017 14:48] Cameron Osborn: now we're on subsequent tokens
 			{
-				//[11/25/2017 14:48] Cameron Osborn: now we're on subsequent tokens
-
 				//[11/25/2017 16:46] Cameron Osborn: ensure final token in statement is semicolon
 				if (tokenIndex + 1 == iter->Tokens.size())
 				{
@@ -459,7 +499,7 @@ void Interpreter::checkSyntax()
 
 void Interpreter::checkTokenValidAtBeginningOfStatement(SourceCodeToken checkToken)
 {
-	if (checkToken.Category == ID_NAME || (checkToken.Category == KEYWORD&&checkToken.Token == "display") || (checkToken.Category == KEYWORD&&checkToken.Token == "read"))
+	if (checkToken.Category == ID_NAME || (checkToken.Category == KEYWORD && checkToken.Token == "display") || (checkToken.Category == KEYWORD && checkToken.Token == "read"))
 	{
 
 	}
@@ -467,4 +507,9 @@ void Interpreter::checkTokenValidAtBeginningOfStatement(SourceCodeToken checkTok
 	{
 		errors.push_back(Error("Invalid token at the beginning of statement. Statements cannot begin with the " + checkToken.GetTokenCategoryName() + ": " + checkToken.Token + ". Statements must begin with either read, display, or a variable name.", checkToken.LineNumber + 1, checkToken.TokenNumber + 1));
 	}
+	//if(checkToken.Category!=ID_NAME&&(checkToken.Category!=KEYWORD&&checkToken.Token=="display")&&(checkToken.Category!=KEYWORD&&checkToken.Token=="read"))
+	//{
+	//	errors.push_back(Error("Invalid token at the beginning of statement. Statements cannot begin with the " + checkToken.GetTokenCategoryName() + ": " + checkToken.Token + ". Statements must begin with either read, display, or a variable name.", checkToken.LineNumber + 1, checkToken.TokenNumber + 1));
+	//}
+
 }
