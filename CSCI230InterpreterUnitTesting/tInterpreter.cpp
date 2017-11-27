@@ -148,7 +148,7 @@ namespace CSCI230InterpreterUnitTesting
 			terp.parseSourceCode(testCase1, false, false);
 
 			//Assert
-			Assert::IsTrue(terp.BuildStatus);			
+			Assert::IsTrue(terp.BuildStatus);
 		}
 
 		//[11/26/2017 02:59] Cameron Osborn: Baseline test ==> ensure that read token can be successfully identified at the beginning of the statement.
@@ -222,7 +222,7 @@ namespace CSCI230InterpreterUnitTesting
 
 			//[11/26/2017 03:56] Cameron Osborn: Check for invalid string literal at the start of the statement(1 error)
 			testCase1.push_back("\"Here's some text\";");
-			
+
 			//[11/26/2017 03:58] Cameron Osborn: Check for invalid language reserved characters at the start of the statement(7 errors)
 			testCase1.push_back("(8;");
 			testCase1.push_back(")8;");
@@ -252,7 +252,7 @@ namespace CSCI230InterpreterUnitTesting
 
 			//Assert
 			Assert::IsTrue(terp.BuildStatus);
-			
+
 			//Arrange
 			vector<string>testCase2;
 			testCase2.push_back("volume * 3.14;");
@@ -303,7 +303,7 @@ namespace CSCI230InterpreterUnitTesting
 
 			//Assert
 			Assert::IsFalse(terp.BuildStatus);
-			Assert::AreEqual(1, terp.GetErrorCount());			
+			Assert::AreEqual(1, terp.GetErrorCount());
 		}
 
 		//[11/26/2017 04:15] Cameron Osborn: Validate that the variable table size is 1 after read operation.
@@ -357,7 +357,149 @@ namespace CSCI230InterpreterUnitTesting
 			Assert::AreEqual(1, terp.GetErrorCount());
 
 		}
-		//[11/26/2017 04:22] Cameron Osborn: LEFT OFF IN interpreter.cpp LINE 318 for Code coverege checks and comment review.
+
+		//[11/26/2017 12:17] Cameron Osborn: Display op must be followed by ID name, string literal, numerical literal,  logical NOT operator, or left parenthesis.
+		TEST_METHOD(DisplayCanBeFollowedByNumericLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check numeric literal after display statement. Should Pass.
+			testCase1.push_back("display 3.14;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsTrue(terp.BuildStatus);
+
+		}
 		
+		//[11/26/2017 12:17] Cameron Osborn: Display op must be followed by ID name, string literal, numerical literal,  logical NOT operator, or left parenthesis.
+		TEST_METHOD(DisplayCanBeFollowedByLeftParenthesis)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+			testCase1.push_back("display (3+2)*5;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsTrue(terp.BuildStatus);
+		}
+
+		//[11/26/2017 12:17] Cameron Osborn: Display op must be followed by ID name, string literal, numerical literal,  logical NOT operator, or left parenthesis.
+		TEST_METHOD(DisplayCanBeFollowedByStringLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+			testCase1.push_back("display \"Heres some text\";");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsTrue(terp.BuildStatus);
+		}
+
+		//[11/26/2017 12:17] Cameron Osborn: Display op must be followed by ID name, string literal, numerical literal,  logical NOT operator, or left parenthesis.
+		TEST_METHOD(DisplayCanBeFollowedByIdName)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+			testCase1.push_back("radius = 2;");
+			testCase1.push_back("display radius;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsTrue(terp.BuildStatus);
+		}
+
+		//[11/26/2017 12:17] Cameron Osborn: Display op must be followed by ID name, string literal, numerical literal,  logical NOT operator, or left parenthesis.
+		TEST_METHOD(DisplayCanBeFollowedByLogicalNotOperator)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+			testCase1.push_back("display !1;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsTrue(terp.BuildStatus);
+		}
+
+
+
+		//[11/27/2017 01:57] Cameron Osborn: Verify all invalid tokens following the display statement are caught. Some will throw a double error because the token is outright disallowed in a display statement so when the syntax check gets to that token it will throw a secondary error.
+		TEST_METHOD(DisplayCannotBeFollowedByInvalidToken)
+		{
+			//[11/27/2017 04:01] Cameron Osborn: LEFT OFF HERE. This isn't working.
+			//Arrange
+			vector<string> testCase1;
+
+
+			//[11/26/2017 03:41] Cameron Osborn: Check for invalid keywords after the display token (10 errors)
+			//[11/27/2017 01:37] Cameron Osborn: Errors double up in this section since keywords can't be used outside of the first token in a statement.
+			testCase1.push_back("display while;");
+			testCase1.push_back("display function;");
+			testCase1.push_back("display if;");
+			testCase1.push_back("display else;");
+			testCase1.push_back("display return;");
+
+			//[11/26/2017 03:42] Cameron Osborn: Check for invalid logical operators after the display token(2 errors). Unary operators (logical NOT) can follow the display statement.			
+			testCase1.push_back("display || 8;");
+			testCase1.push_back("display && 8;");
+
+
+			//[11/26/2017 03:51] Cameron Osborn: Check for invalid relational operators after the display token(6 errors)
+			testCase1.push_back("display > 8;");
+			testCase1.push_back("display == 8;");
+			testCase1.push_back("display < 8;");
+			testCase1.push_back("display >= 8;");
+			testCase1.push_back("display <= 8;");
+			testCase1.push_back("display != 8;");
+
+			//[11/26/2017 03:53] Cameron Osborn: Check for invalid Numeric operators after the display token(5 errors)
+			testCase1.push_back("display +8;");
+			testCase1.push_back("display -8;");
+			testCase1.push_back("display *8;");
+			testCase1.push_back("display /8;");
+			testCase1.push_back("display %8;");
+
+			//[11/26/2017 03:58] Cameron Osborn: Check for invalid language reserved characters after the display token(10 errors)
+			
+			testCase1.push_back("display );"); // expect 1 error
+			testCase1.push_back("display {;"); // expect 2 errors: second comes from invalid token in display statement
+			testCase1.push_back("display };"); // expect 2 errors: second comes from invalid token in display statement
+			testCase1.push_back("display ;;"); // expect 2 errors: second comes from invalid token in display statement
+			testCase1.push_back("display :;"); // expect 2 errors: second comes from invalid token in display statement
+			testCase1.push_back("display ,;"); // expect 1 error
+
+
+			//[11/26/2017 03:55] Cameron Osborn: Check for invalid assignment operator (=) at the start of the statement (2 errors)
+			//First error from invalid token after display, second error from invalid use of assignment operator.
+			testCase1.push_back("display = 8;");
+
+
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(35, terp.GetErrorCount());
+		}
 	};
 }

@@ -315,12 +315,11 @@ void Interpreter::checkSyntax()
 					}
 				}
 
-				//[11/26/2017 04:22] Cameron Osborn: LEFT OFF HERE WITH CODE COVERAGE CHECKS
 				if (token->Category == KEYWORD && token->Token == "display")
 				{
 					iter->StatementType = "display";
-					//[11/25/2017 15:10] Cameron Osborn: display operation. Next token must be string literal, numeric literal, variable name or logical NOT operator
-					if (nextToken.Category != ID_NAME && nextToken.Category != STRING_LITERAL && nextToken.Category != NUMERICAL_LITERAL && (nextToken.Category != LOGICAL_OP&&nextToken.Token == "!"))
+					//[11/25/2017 15:10] Cameron Osborn: display operation. Next token must be string literal, numeric literal, left parenthesis, variable name or logical NOT operator
+					if (nextToken.Category != ID_NAME && nextToken.Category != STRING_LITERAL && nextToken.Category!=LEFT_PARENTHESIS && nextToken.Category != NUMERICAL_LITERAL && (nextToken.Category == LOGICAL_OP&&nextToken.Token != "!"))
 					{
 						errors.push_back(Error("Invalid display operation: the 'display keyword must be followed by a string, number, variable name, or the logical NOT (!) operator.", token->LineNumber + 1, token->TokenNumber + 1));
 					}
