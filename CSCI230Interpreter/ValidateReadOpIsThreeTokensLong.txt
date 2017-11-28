@@ -1,0 +1,32 @@
+//Arrange
+vector<string>testCase1;
+testCase1.push_back("read height;");
+
+//Act
+terp.parseSourceCode(testCase1, false, false);
+
+//Assert
+Assert::IsTrue(terp.BuildStatus);
+
+//Arrange
+vector<string>testCase2;
+testCase2.push_back("read height");
+
+//Act
+terp.parseSourceCode(testCase2, false, false);
+
+//Assert
+Assert::IsFalse(terp.BuildStatus);
+//[11/26/2017 04:18] Cameron Osborn: Must throw 2 errors. Missing semicolon on end of statement and read statement not three tokens long.
+Assert::AreEqual(2, terp.GetErrorCount());
+
+//Arrange
+vector<string>testCase3;
+testCase3.push_back("read height width;");
+
+//Act
+terp.parseSourceCode(testCase3, false, false);
+
+//Assert
+Assert::IsFalse(terp.BuildStatus);
+Assert::AreEqual(1, terp.GetErrorCount());

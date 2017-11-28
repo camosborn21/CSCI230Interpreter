@@ -1,0 +1,52 @@
+//Arrange
+vector<string> testCase1;
+//[11/26/2017 03:41] Cameron Osborn: Check for invalid keywords after the ID_NAME token (14 errors)
+//[11/27/2017 01:37] Cameron Osborn: Errors double up in this section since keywords can't be used outside of the first token in a statement.
+testCase1.push_back("volume read;");
+testCase1.push_back("volume function;");
+testCase1.push_back("volume if;");
+testCase1.push_back("volume else;");
+testCase1.push_back("volume return;");
+testCase1.push_back("volume while;");
+testCase1.push_back("volume display;");
+
+//[11/26/2017 03:42] Cameron Osborn: Check for invalid logical operators after the ID_NAME token(3 errors). 
+testCase1.push_back("volume ||8;");
+testCase1.push_back("volume &&8;");
+testCase1.push_back("volume !7;");
+
+
+//[11/26/2017 03:51] Cameron Osborn: Check for invalid relational operators after the ID_NAME token(6 errors)
+testCase1.push_back("volume >8;");
+testCase1.push_back("volume ==8;");
+testCase1.push_back("volume <8;");
+testCase1.push_back("volume >=8;");
+testCase1.push_back("volume <=8;");
+testCase1.push_back("volume !=8;");
+
+//[11/26/2017 03:53] Cameron Osborn: Check for invalid Numeric operators after the ID_NAME token(5 errors)
+testCase1.push_back("volume +8;");
+testCase1.push_back("volume -8;");
+testCase1.push_back("volume *8;");
+testCase1.push_back("volume /8;");
+testCase1.push_back("volume %8;");
+
+//[11/26/2017 03:58] Cameron Osborn: Check for invalid language reserved characters after the ID_NAME token(12 errors)
+testCase1.push_back("volume (8;");
+testCase1.push_back("volume );");
+testCase1.push_back("volume {;"); //Throws 2 errors
+testCase1.push_back("volume };"); //Throws 2 errors
+testCase1.push_back("volume ;;"); //Throws 2 errors
+testCase1.push_back("volume :;"); //Throws 2 errors
+testCase1.push_back("volume ,;"); //Throws 2 errors
+
+//[11/27/2017 17:47] Cameron Osborn: Check for invalid string and numeric literal after ID_NAME token(3 errors)
+testCase1.push_back("volume 3.14;");
+testCase1.push_back("volume \"heres some text\""); //Throws 2 errors
+
+//Act
+terp.parseSourceCode(testCase1, false, false);
+
+//Assert
+Assert::IsFalse(terp.BuildStatus);
+Assert::AreEqual(43, terp.GetErrorCount());

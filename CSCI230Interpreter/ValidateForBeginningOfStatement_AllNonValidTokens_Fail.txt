@@ -1,0 +1,55 @@
+//Arrange
+vector<string>testCase1;
+
+//[11/26/2017 03:42] Cameron Osborn: Check numeric literal at start of statement (1 error)
+testCase1.push_back("3.14* r * r * h = volume;");
+//[11/26/2017 03:38] Cameron Osborn: perhaps of note but this will only throw an error for invalid starting token. After that point it doesn't parse the rest of the line because it won't know which rules to follow which means this has no idea that the variable names given there are invalid.
+
+//[11/26/2017 03:41] Cameron Osborn: Check for invalid keywords at start of statement(5 errors)
+testCase1.push_back("while(1);");
+testCase1.push_back("function main();");
+testCase1.push_back("if(1);");
+testCase1.push_back("else;");
+testCase1.push_back("return;");
+
+//[11/26/2017 03:42] Cameron Osborn: Check for invalid logical operators at the start of statement(3 errors)
+testCase1.push_back("!1;");
+testCase1.push_back("||8;");
+testCase1.push_back("&&8;");
+
+//[11/26/2017 03:51] Cameron Osborn: Check for invalid relational operators at the start of statement(6 errors)
+testCase1.push_back(">8;");
+testCase1.push_back("==8;");
+testCase1.push_back("<8;");
+testCase1.push_back(">=8;");
+testCase1.push_back("<=8;");
+testCase1.push_back("!=8;");
+
+//[11/26/2017 03:53] Cameron Osborn: Check for invalid Numeric operators at the start of statement(5 errors)
+testCase1.push_back("+8;");
+testCase1.push_back("-8;");
+testCase1.push_back("*8;");
+testCase1.push_back("/8;");
+testCase1.push_back("%8;");
+
+//[11/26/2017 03:55] Cameron Osborn: Check for invalid assignment operator (=) at the start of the statement (1 error)
+testCase1.push_back("=8;");
+
+//[11/26/2017 03:56] Cameron Osborn: Check for invalid string literal at the start of the statement(1 error)
+testCase1.push_back("\"Here's some text\";");
+
+//[11/26/2017 03:58] Cameron Osborn: Check for invalid language reserved characters at the start of the statement(7 errors)
+testCase1.push_back("(8;");
+testCase1.push_back(")8;");
+testCase1.push_back("{8;");
+testCase1.push_back("}8;");
+testCase1.push_back(";8;");
+testCase1.push_back(":8;");
+testCase1.push_back(",8;");
+
+//Act
+terp.parseSourceCode(testCase1, false, false);
+
+//Assert
+Assert::IsFalse(terp.BuildStatus);
+Assert::AreEqual(29, terp.GetErrorCount());

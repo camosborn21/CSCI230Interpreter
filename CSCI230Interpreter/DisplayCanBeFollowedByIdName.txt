@@ -1,0 +1,12 @@
+//Arrange
+vector<string>testCase1;
+
+//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+testCase1.push_back("radius = 2;");
+testCase1.push_back("display radius;");
+
+//Act
+terp.parseSourceCode(testCase1, false, false);
+
+//Assert
+Assert::IsTrue(terp.BuildStatus);

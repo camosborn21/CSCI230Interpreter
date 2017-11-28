@@ -1,0 +1,56 @@
+//Arrange
+vector<string> testCase1;
+//[11/26/2017 03:41] Cameron Osborn: Check for invalid keywords after the read token (7 errors)
+//[11/27/2017 01:37] Cameron Osborn: Errors double up in this section since keywords can't be used outside of the first token in a statement.
+testCase1.push_back("read read;");
+testCase1.push_back("read function;");
+testCase1.push_back("read if;");
+testCase1.push_back("read else;");
+testCase1.push_back("read return;");
+testCase1.push_back("read while;");
+testCase1.push_back("read display;");
+
+//[11/26/2017 03:42] Cameron Osborn: Check for invalid logical operators after the read token(2 errors). Unary operators (logical NOT) can follow the read statement.
+testCase1.push_back("read ||;");
+testCase1.push_back("read &&;");
+
+
+//[11/26/2017 03:51] Cameron Osborn: Check for invalid relational operators after the read token(6 errors)
+testCase1.push_back("read >;");
+testCase1.push_back("read ==;");
+testCase1.push_back("read <;");
+testCase1.push_back("read >=;");
+testCase1.push_back("read <=;");
+testCase1.push_back("read !=;");
+
+//[11/26/2017 03:53] Cameron Osborn: Check for invalid Numeric operators after the read token(5 errors)
+testCase1.push_back("read +;");
+testCase1.push_back("read -;");
+testCase1.push_back("read *;");
+testCase1.push_back("read /;");
+testCase1.push_back("read %;");
+
+//[11/26/2017 03:58] Cameron Osborn: Check for invalid language reserved characters after the read token(7 errors)
+testCase1.push_back("read (;");
+testCase1.push_back("read );");
+testCase1.push_back("read {;");
+testCase1.push_back("read };");
+testCase1.push_back("read ;;");
+testCase1.push_back("read :;");
+testCase1.push_back("read ,;");
+
+
+//[11/26/2017 03:55] Cameron Osborn: Check for invalid assignment operator (=) after the read token (2 errors)
+//First error from invalid token after read, second error from invalid use of assignment operator.
+testCase1.push_back("read =;");
+
+//[11/27/2017 14:54] Cameron Osborn: Check for invalid numeric and string literals (2 errors)
+testCase1.push_back("read 3.14;");
+testCase1.push_back("read \"heres some text\";");
+
+//Act
+terp.parseSourceCode(testCase1, false, false);
+
+//Assert
+Assert::IsFalse(terp.BuildStatus);
+Assert::AreEqual(30, terp.GetErrorCount());

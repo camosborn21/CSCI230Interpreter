@@ -11,35 +11,9 @@ using namespace std;
 namespace CSCI230InterpreterUnitTesting
 {
 	Interpreter terp;
-	//ProgramUI ui;
-	/*vector<string>testCase1;
-	vector<string>testCase2;
-	vector<string>testCase3;
-	vector<string>testCase4;*/
 	TEST_CLASS(tInterpreter)
 	{
-	private:
-
-
 	public:
-		TEST_CLASS_INITIALIZE(tInterpreter_SetUp)
-		{
-			/*testCase1.push_back("display \"************************************************\";");
-			testCase1.push_back("display \"Want to determine the volume of a right circular cylinder!\";");
-			testCase1.push_back("display \"\";");
-			testCase1.push_back("display \"What is the height of the cylinder ? \";");
-			testCase1.push_back("read height;");
-			testCase1.push_back("display \"What is the radius of the cylinder ? \";");
-			testCase1.push_back("read radius;");
-			testCase1.push_back("volume = 3.14* radius * radius * height;");
-			testCase1.push_back("display \"\";");
-			testCase1.push_back("display \"The volume of the cylinder is \", volume;");
-			testCase1.push_back("display \"************************************************\";");*/
-
-
-
-
-		}
 
 		//[11/26/2017 02:56] Cameron Osborn: Validate the parser and syntax checker can successfully build the code from testCylinder1.txt
 		TEST_METHOD(BuildSucceedsOnTestCylinder1)

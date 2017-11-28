@@ -1,0 +1,10 @@
+//Arrange
+vector<string>testCase1;
+testCase1.push_back("display while;");
+
+//Act
+terp.parseSourceCode(testCase1, false, false);
+
+//Assert
+Assert::IsFalse(terp.BuildStatus);
+Assert::AreEqual(2, terp.GetErrorCount());
