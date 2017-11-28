@@ -315,6 +315,8 @@ void Interpreter::checkSyntax()
 					}
 				}
 
+
+				//[11/28/2017 01:54] Cameron Osborn: TestCovered
 				if (token->Category == KEYWORD && token->Token == "display")
 				{
 					iter->StatementType = "display";
@@ -360,8 +362,8 @@ void Interpreter::checkSyntax()
 							if (token->Category == NUMERICAL_LITERAL || token->Category == ID_NAME)
 							{
 								//[11/25/2017 17:11] Cameron Osborn: valid tokens following Numeric literal and ID name: any op except logical NOT operator, right paren, semi colon, comma
-								//[11/27/2017 20:19] Cameron Osborn: LEFT OFF HERE WITH TEST COVERAGE CHECKS
-								if (nextToken.Category != RELATIONAL_OP&& nextToken.Category != SEMICOLON  &&nextToken.Category != NUMERICAL_OP&&nextToken.Category != RIGHT_PARENTHESIS && (nextToken.Category != LOGICAL_OP&&nextToken.Token == "!") && nextToken.Category != COMMA)
+								//[11/28/2017 01:54] Cameron Osborn: TestCovered
+								if (nextToken.Category != RELATIONAL_OP&& nextToken.Category != SEMICOLON  &&nextToken.Category != NUMERICAL_OP&&nextToken.Category != RIGHT_PARENTHESIS && !(nextToken.Category == LOGICAL_OP&&nextToken.Token != "!") && nextToken.Category != COMMA)
 								{
 									errors.push_back(Error("Invalid syntax. Numeric literal or variable cannot be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 								}
@@ -372,54 +374,66 @@ void Interpreter::checkSyntax()
 							}
 							else
 							{
-								//[11/25/2017 18:52] Cameron Osborn: valid tokens following operators
-								if (token->Category == RELATIONAL_OP || token->Category == NUMERICAL_OP || token->Category == LOGICAL_OP)
+
+								if (token->Category == LOGICAL_OP&&token->Token == "!")
 								{
-									//[11/25/2017 18:52] Cameron Osborn: valid tokens after an operator: numerical literal, id name, left paren
-									if (nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME&&nextToken.Category != LEFT_PARENTHESIS)
+									//[11/28/2017 01:32] Cameron Osborn: Valid tokens following the unary operator Logical NOT (!): numerical literal, id name, left paren
+									if(nextToken.Category!=NUMERICAL_LITERAL && nextToken.Category!=ID_NAME && nextToken.Category!=LEFT_PARENTHESIS)
 									{
 										errors.push_back(Error("Invalid syntax. An operator cannot be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 									}
+									
 								}
-								else
-								{
-									//[11/25/2017 18:57] Cameron Osborn: comma
-									if (token->Category == COMMA)
+								else {
+									//[11/25/2017 18:52] Cameron Osborn: valid tokens following binary operators
+									if (token->Category == RELATIONAL_OP || token->Category == NUMERICAL_OP ||( token->Category == LOGICAL_OP&&token->Token!="!"))
 									{
-										//[11/25/2017 19:00] Cameron Osborn: Comma can be followed by string literal, numeric literal, left paren, ID_name, logical not op.
-										if (nextToken.Category != STRING_LITERAL&&nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME && nextToken.Category != LEFT_PARENTHESIS && (nextToken.Category != LOGICAL_OP&&nextToken.Token == "!"))
+										//[11/25/2017 18:52] Cameron Osborn: valid tokens after an operator: numerical literal, id name, left paren, Unary Operators (Logical NOT symbol)
+										if (nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME&&nextToken.Category != LEFT_PARENTHESIS && !(nextToken.Category == LOGICAL_OP&&nextToken.Token == "!"))
 										{
-											errors.push_back(Error("Invalid syntax. A comma can't be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
+											errors.push_back(Error("Invalid syntax. An operator cannot be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 										}
 									}
 									else
 									{
-										//[11/25/2017 18:57] Cameron Osborn: Left Paren
-										if (token->Category == LEFT_PARENTHESIS)
+										//[11/25/2017 18:57] Cameron Osborn: comma
+										if (token->Category == COMMA)
 										{
-											//[11/25/2017 19:05] Cameron Osborn: Left paren can be followed by numeric literal, ID name, left paren, logical NOT operator
-											if (nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME&&nextToken.Category != LEFT_PARENTHESIS && (nextToken.Category != LOGICAL_OP && nextToken.Token == "!"))
+											//[11/25/2017 19:00] Cameron Osborn: Comma can be followed by string literal, numeric literal, left paren, ID_name, logical not op.
+											if (nextToken.Category != STRING_LITERAL&&nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME && nextToken.Category != LEFT_PARENTHESIS && (nextToken.Category != LOGICAL_OP&&nextToken.Token == "!"))
 											{
-												errors.push_back(Error("Invalid syntax. A left parenthesis can't be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
+												errors.push_back(Error("Invalid syntax. A comma can't be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 											}
-
 										}
 										else
 										{
-											//[11/25/2017 19:11] Cameron Osborn: right paren
-											if (token->Category == RIGHT_PARENTHESIS)
+											//[11/25/2017 18:57] Cameron Osborn: Left Paren
+											if (token->Category == LEFT_PARENTHESIS)
 											{
-												//[11/25/2017 19:11] Cameron Osborn: right paren can be followed by any op except logical not op, comma, right paren, semi-colon
-
-												if (nextToken.Category != RELATIONAL_OP&&nextToken.Category != NUMERICAL_OP&&nextToken.Category != COMMA&&nextToken.Category != RIGHT_PARENTHESIS&&nextToken.Category != SEMICOLON && (nextToken.Category != LOGICAL_OP&&nextToken.Token != "!"))
+												//[11/25/2017 19:05] Cameron Osborn: Left paren can be followed by numeric literal, ID name, left paren, logical NOT operator
+												if (nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME&&nextToken.Category != LEFT_PARENTHESIS && (nextToken.Category != LOGICAL_OP && nextToken.Token == "!"))
 												{
-													errors.push_back(Error("Invalid syntax. A right parenthesis can't be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
+													errors.push_back(Error("Invalid syntax. A left parenthesis can't be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 												}
 
 											}
 											else
 											{
-												errors.push_back(Error("Invalid token! The " + token->GetTokenCategoryName() + " token: " + token->Token + " cannot be used in a display operation.", token->LineNumber + 1, token->TokenNumber + 1));
+												//[11/25/2017 19:11] Cameron Osborn: right paren
+												if (token->Category == RIGHT_PARENTHESIS)
+												{
+													//[11/25/2017 19:11] Cameron Osborn: right paren can be followed by any op except logical not op, comma, right paren, semi-colon
+
+													if (nextToken.Category != RELATIONAL_OP&&nextToken.Category != NUMERICAL_OP&&nextToken.Category != COMMA&&nextToken.Category != RIGHT_PARENTHESIS&&nextToken.Category != SEMICOLON && !(nextToken.Category == LOGICAL_OP&&nextToken.Token != "!"))
+													{
+														errors.push_back(Error("Invalid syntax. A right parenthesis can't be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
+													}
+
+												}
+												else
+												{
+													errors.push_back(Error("Invalid token! The " + token->GetTokenCategoryName() + " token: " + token->Token + " cannot be used in a display operation.", token->LineNumber + 1, token->TokenNumber + 1));
+												}
 											}
 										}
 									}
@@ -428,15 +442,15 @@ void Interpreter::checkSyntax()
 						}
 					} //end of display syntax check
 
-					//[11/25/2017 19:18] Cameron Osborn: validate assignment statement
 
+					//[11/25/2017 19:18] Cameron Osborn: validate assignment statement
 					if (iter->StatementType == "assignment")
 					{
 						// can include: numeric literal, id name, left/right paren, any operator, assignment operator(once in 2nd position) using tokenIndex to check position counting from 0 (i.e. when token index == 1 then assignment op, else fail
 						if (token->Category == NUMERICAL_LITERAL || token->Category == ID_NAME)
 						{
 							//[11/25/2017 19:24] Cameron Osborn: valid tokens following Numeric literal and ID name: any op except logical NOT operator, right paren, semi colon
-							if (nextToken.Category != RELATIONAL_OP&& nextToken.Category != SEMICOLON  &&nextToken.Category != NUMERICAL_OP&&nextToken.Category != RIGHT_PARENTHESIS && (nextToken.Category != LOGICAL_OP&&nextToken.Token == "!"))
+							if (nextToken.Category != RELATIONAL_OP&& nextToken.Category != SEMICOLON  &&nextToken.Category != NUMERICAL_OP&&nextToken.Category != RIGHT_PARENTHESIS && !(nextToken.Category == LOGICAL_OP&&nextToken.Token != "!"))
 							{
 								errors.push_back(Error("Invalid syntax. Numeric literal or variable cannot be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 							}
@@ -461,33 +475,43 @@ void Interpreter::checkSyntax()
 								{
 									//[11/25/2017 19:11] Cameron Osborn: right paren can be followed by any op except logical not op,  right paren, semi-colon
 
-									if (nextToken.Category != RELATIONAL_OP&&nextToken.Category != NUMERICAL_OP&&nextToken.Category != RIGHT_PARENTHESIS&&nextToken.Category != SEMICOLON && (nextToken.Category != LOGICAL_OP&&nextToken.Token != "!"))
+									if (nextToken.Category != RELATIONAL_OP&&nextToken.Category != NUMERICAL_OP&&nextToken.Category != RIGHT_PARENTHESIS&&nextToken.Category != SEMICOLON && !(nextToken.Category == LOGICAL_OP&&nextToken.Token != "!"))
 									{
 										errors.push_back(Error("Invalid syntax. A right parenthesis can't be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 									}
 								}
 								else
 								{
-									if (token->Category == RELATIONAL_OP || token->Category == NUMERICAL_OP || token->Category == LOGICAL_OP)
+									if(token->Category==LOGICAL_OP&&token->Token=="!")
 									{
-										//[11/25/2017 18:52] Cameron Osborn: valid tokens after an operator: numerical literal, id name, left paren
-										if (nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME&&nextToken.Category != LEFT_PARENTHESIS)
+										//[11/28/2017 01:32] Cameron Osborn: Valid tokens following the unary operator Logical NOT (!): numerical literal, id name, left paren
+										if (nextToken.Category != NUMERICAL_LITERAL && nextToken.Category != ID_NAME && nextToken.Category != LEFT_PARENTHESIS)
 										{
 											errors.push_back(Error("Invalid syntax. An operator cannot be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 										}
 									}
-									else
-									{
-										if (token->Category == ASSIGNMENT_OP)
+									else {
+										if (token->Category == RELATIONAL_OP || token->Category == NUMERICAL_OP || (token->Category == LOGICAL_OP&&token->Token != "!"))
 										{
-											if (tokenIndex != 1)
+											//[11/25/2017 18:52] Cameron Osborn: valid tokens after an operator: numerical literal, id name, left paren
+											if (nextToken.Category != NUMERICAL_LITERAL&&nextToken.Category != ID_NAME&&nextToken.Category != LEFT_PARENTHESIS && !(nextToken.Category == LOGICAL_OP&&nextToken.Token == "!"))
 											{
-
+												errors.push_back(Error("Invalid syntax. An operator cannot be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
 											}
 										}
 										else
 										{
-											errors.push_back(Error("Invalid token! The " + token->GetTokenCategoryName() + " token: " + token->Token + " cannot be used in an assignment operation.", token->LineNumber + 1, token->TokenNumber + 1));
+											if (token->Category == ASSIGNMENT_OP)
+											{
+												if (tokenIndex != 1)
+												{
+													errors.push_back(Error("Invalid syntax. The assignment operator can only appear directly after the variable name being assigned.", token->LineNumber + 1, token->TokenNumber + 1));
+												}
+											}
+											else
+											{
+												errors.push_back(Error("Invalid token! The " + token->GetTokenCategoryName() + " token: " + token->Token + " cannot be used in an assignment operation.", token->LineNumber + 1, token->TokenNumber + 1));
+											}
 										}
 									}
 								}

@@ -539,57 +539,373 @@ namespace CSCI230InterpreterUnitTesting
 			Assert::IsTrue(terp.BuildStatus);
 		}
 
-
-
-		//[11/27/2017 01:57] Cameron Osborn: Verify all invalid tokens following the display statement are caught. Some will throw a double error because the token is outright disallowed in a display statement so when the syntax check gets to that token it will throw a secondary error.
-		TEST_METHOD(DisplayCannotBeFollowedByInvalidToken)
+		//[11/28/2017 04:31] Cameron Osborn: This "Display_SecondToken_{Test}_Fails" series tests ensure that the display token cannot be followed by any disallowed tokens.
+		TEST_METHOD(Display_SecondToken_WhileKeyword_Fails)
 		{
 			//Arrange
-			vector<string> testCase1;
-
-
-			//[11/26/2017 03:41] Cameron Osborn: Check for invalid keywords after the display token (14 errors)
-			//[11/27/2017 01:37] Cameron Osborn: Errors double up in this section since keywords can't be used outside of the first token in a statement.
+			vector<string>testCase1;
 			testCase1.push_back("display while;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_FunctionKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display function;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+		TEST_METHOD(Display_SecondToken_IfKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display if;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_ElseKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display else;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_ReturnKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display return;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_DisplayKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display display;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_ReadKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display read;");
 
-			//[11/26/2017 03:42] Cameron Osborn: Check for invalid logical operators after the display token(2 errors). Unary operators (logical NOT) can follow the display statement.			
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_LogicalOROp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display || 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_LogicalANDOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display && 8;");
 
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
 
-			//[11/26/2017 03:51] Cameron Osborn: Check for invalid relational operators after the display token(6 errors)
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RelationalGreaterThanOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display > 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RelationalEqualsOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display == 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RelationalLessThanOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display < 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RelationalGreaterThanEqualToOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display >= 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RelationalLessThanEqualToOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display <= 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RelationalNotEqualOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display != 8;");
 
-			//[11/26/2017 03:53] Cameron Osborn: Check for invalid Numeric operators after the display token(5 errors)
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_NumericAddOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display +8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_NumericSubtractOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display -8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_NumericMultiplyOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display *8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_NumericDivisionOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display /8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_NumericModuloOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display %8;");
 
-			//[11/26/2017 03:58] Cameron Osborn: Check for invalid language reserved characters after the display token(10 errors)
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
 
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RightParenthesis_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display );"); // expect 1 error
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_LeftCurlybrace_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display {;"); // expect 2 errors: second comes from invalid token in display statement
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_RightCurlybrace_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display };"); // expect 2 errors: second comes from invalid token in display statement
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_SemicolonMidLine_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display ;;"); // expect 2 errors: second comes from invalid token in display statement
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_Colon_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display :;"); // expect 2 errors: second comes from invalid token in display statement
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+		TEST_METHOD(Display_SecondToken_Comma_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display ,;"); // expect 1 error
 
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
 
-			//[11/26/2017 03:55] Cameron Osborn: Check for invalid assignment operator (=) after the display token (2 errors)
-			//First error from invalid token after display, second error from invalid use of assignment operator.
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_SecondToken_AssignmentOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display = 8;");
 
 			//Act
@@ -597,8 +913,10 @@ namespace CSCI230InterpreterUnitTesting
 
 			//Assert
 			Assert::IsFalse(terp.BuildStatus);
-			Assert::AreEqual(39, terp.GetErrorCount());
+			Assert::AreEqual(2, terp.GetErrorCount());
 		}
+
+		
 
 		//[11/27/2017 18:48] Cameron Osborn: Check that an error is thrown for each statement type if semi colon does not appear at the end of the statement.
 		TEST_METHOD(SemicolonMustAppearAtEndOfStatement)
@@ -635,12 +953,13 @@ namespace CSCI230InterpreterUnitTesting
 			Assert::IsFalse(terp.BuildStatus);
 			Assert::AreEqual(2, terp.GetErrorCount());
 		}
+
+		//[11/28/2017 00:34] Cameron Osborn: Check whether a string literal in a display statement followed by comma or semicolon will successfully build.
 		TEST_METHOD(Display_StringLit_FollowedByCommaOrSemiColonSucceeds)
 		{
 			//Arrange
 			vector<string>testCase1;
 
-			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
 			testCase1.push_back("display \"Heres some text\";");
 			testCase1.push_back("display \"Heres some text\",8;");
 			//Act
@@ -648,57 +967,378 @@ namespace CSCI230InterpreterUnitTesting
 
 			//Assert
 			Assert::IsTrue(terp.BuildStatus);
-			
 		}
 
-		TEST_METHOD(Display_StringLit_FollowedByInvalidTokenFails)
+
+		//[11/28/2017 04:32] Cameron Osborn: The "Display_StringLiteral_{test}_Fails" Series of tests checks that any string literal in a display statement cannot be followed by invalid tokens.
+		TEST_METHOD(Display_StringLiteral_WhileKeyword_Fails)
 		{
 			//Arrange
-			vector<string> testCase1;
-
-
-			//[11/26/2017 03:41] Cameron Osborn: Check for invalid keywords after the display token (14 errors)
-			//[11/27/2017 01:37] Cameron Osborn: Errors double up in this section since keywords can't be used outside of the first token in a statement.
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  while;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_FunctionKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  function;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_IfKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  if;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_ElseKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  else;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_ReturnKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  return;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_DisplayKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  display;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_ReadKeyword_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  read;");
 
-			//[11/26/2017 03:42] Cameron Osborn: Check for invalid logical operators after the display token(3 errors). 			
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_LogicalOROp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  || 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_LogicalANDOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  && 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_LogicalNOTOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  !1;");
 
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
 
-			//[11/26/2017 03:51] Cameron Osborn: Check for invalid relational operators after the display token(6 errors)
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RelationalGreaterThanOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  > 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RelationalEqualsOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  == 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RelationalLessThanOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  < 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RelationalGreaterThanEqualToOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  >= 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RelationalLessThanEqualTo_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  <= 8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RelationalNotEqual_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  != 8;");
 
-			//[11/26/2017 03:53] Cameron Osborn: Check for invalid Numeric operators after the display token(5 errors)
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_NumericAddOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  +8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_NumericSubtractOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  -8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_NumericMultiplicationOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  *8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_NumericDivisionOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  /8;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_NumericModuloOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  %8;");
 
-			//[11/26/2017 03:58] Cameron Osborn: Check for invalid language reserved characters after the display token(10 errors)
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_LeftParenthesis_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  (8;"); // expect 1 error
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RightParenthesis_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  );"); // expect 1 error
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_LeftCurlybrace_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  {;"); // expect 2 errors: second comes from invalid token in display statement
-			testCase1.push_back("display \"Heres some text\"  };"); // expect 2 errors: second comes from invalid token in display statement
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_RightCurlybrace_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display \"Heres some text\"  {;"); // expect 2 errors: second comes from invalid token in display statement
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_StringLiteral_Colon_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  :;"); // expect 2 errors: second comes from invalid token in display statement
-			
 
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
 
-			//[11/26/2017 03:55] Cameron Osborn: Check for invalid assignment operator (=) after the display token (2 errors)
-			//First error from invalid token after display, second error from invalid use of assignment operator.
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+		
+		TEST_METHOD(Display_StringLiteral_AssignmentOp_Fails)
+		{
+			//Arrange
+			vector<string>testCase1;
 			testCase1.push_back("display \"Heres some text\"  = 8;");
 
 			//Act
@@ -706,7 +1346,570 @@ namespace CSCI230InterpreterUnitTesting
 
 			//Assert
 			Assert::IsFalse(terp.BuildStatus);
-			Assert::AreEqual(38, terp.GetErrorCount());
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		//[11/28/2017 00:34] Cameron Osborn: Check whether a numerical literal or variable evaluation will build. Assumption: Properly constructed equation follows the display statement.
+		TEST_METHOD(Display_Evaluation_ValidTokensWillBuild)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+			testCase1.push_back("volume=8;");
+			testCase1.push_back("display 8+(volume-3*(2/4))%2>2&&(((1+2)))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=3;");
+			testCase1.push_back("display 8+(volume-3*(2/4))%2>2&&1+2<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&(2!=3);");
+			testCase1.push_back("display 8+(volume-3*(2/4))%2>2&&(!((1+2)*24))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=volume;");
+			testCase1.push_back("display 8+(volume-3*(2/4))%2>2&&(((1+2)))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=3, \"Thats a lot of numbers\";");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsTrue(terp.BuildStatus);
+		}
+
+		//[11/28/2017 01:27] Cameron Osborn: Check that undefined variables in the display method are caught by the syntax check.
+		TEST_METHOD(Display_Evaluation_UndefinedVariableThrowsError)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+			testCase1.push_back("volume=8;");
+			testCase1.push_back("display v;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		//[11/28/2017 04:33] Cameron Osborn: The "Display_Evaluation_{Test}" series checks that numeric literals and variable names in a display statement cannot be followed by invalid characters.
+		TEST_METHOD(Display_Evaluation_NumericLiteralLeftParenthesis)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8(8+8);");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_NumericLiteralKeyword)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8 while;"); // Throws two errors for use of keyword after first token
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_NumericLiteralAssignmentOp)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8 = 9;"); //Throws two errors for use of assignment operation in non-second 
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_NumericLiteralNumericLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8 9;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_NumericLiteralStringLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8 \"Thats a lot of numbers\";");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_NumericLiteralRightCurlybrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8};");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_NumericLiteralLeftCurlybrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8{;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_NumericLiteralColon)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("display 8:;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableLeftParenthesis)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume(8+8);");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableKeyword)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume while;"); // Throws two errors for use of keyword after first token
+
+																							 //Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableAssignmentOp)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume = 9;"); //Throws two errors for use of assignment operation in non-second 
+
+																						 //Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableNumericLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume 9;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableStringLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume \"Thats a lot of numbers\";");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableRightCurlybrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume};");//Throws two errors
+
+																				 //Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableLeftCurlybrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume{;");//Throws two errors
+
+																				 //Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Display_Evaluation_VariableColon)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("display volume:;");//Throws two errors
+
+																				 //Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		//[11/28/2017 02:00] Cameron Osborn: The only category for display that isn't explicitly stated in testing beside string literal and evaluation is the comma character but both of its unit tests are invoked in the above testing for string literals and evaluations.
+		TEST_METHOD(Assignment_Evaluation_ValidTokensWillBuild)
+		{
+			//Arrange
+			vector<string>testCase1;
+
+			//[11/26/2017 03:42] Cameron Osborn: Check variable name after display statement. variable name must be initialized first. Should pass.
+			testCase1.push_back("volume=8;");
+			testCase1.push_back("density = 8+(volume-3*(2/4))%2>2&&(((1+2)))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=3;");
+			testCase1.push_back("density = 8+(volume-3*(2/4))%2>2&&1+2<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&(2!=3);");
+			testCase1.push_back("density = 8+(volume-3*(2/4))%2>2&&(!((1+2)*24))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=volume;");
+			testCase1.push_back("density = 8+(volume-3*(2/4))%2>2&&(((1+2)))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=3;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsTrue(terp.BuildStatus);
+		}
+
+		//[11/28/2017 04:34] Cameron Osborn: The "Assignment_Evaluation_{TestName}" Series of tests ensures that numeric literals and variables on the right hand side of an assignment operator are not followed by an invalid character.
+		TEST_METHOD(Assignment_Evaluation_NumericLiteralLeftParen)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8(8+8);");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_NumericLiteralKeyword)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8 while;"); // Throws two errors for use of keyword after first token
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evalution_NumericLiteralAssignmentOp)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8 = 9;"); //Throws two errors for use of assignment operation in non-second 
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+		TEST_METHOD(Assignment_Evalution_NumericLiteralNumericLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8 9;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_NumericLiteralStringLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8 \"Thats a lot of numbers\";"); //Throws 2
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_NumericLiteralRightCurlybrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8};");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_NumericLiteralLeftCurlyBrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8{;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_NumericLiteralColon)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8:;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_NumericLiteralComma)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = 8,;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+
+
+
+		TEST_METHOD(Assignment_Evaluation_VariableLeftParen)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume(8+8);");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_VariableKeyword)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume while;"); // Throws two errors for use of keyword after first token
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evalution_VariableAssignmentOp)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume = 9;"); //Throws two errors for use of assignment operation in non-second 
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+		TEST_METHOD(Assignment_Evalution_VariableNumericLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume 9;");
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(1, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_VariableStringLiteral)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume \"Thats a lot of numbers\";"); //Throws 2
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_VariableRightCurlybrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume};");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_VariableLeftCurlyBrace)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume{;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_VariableColon)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume:;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
+		}
+
+		TEST_METHOD(Assignment_Evaluation_VariableComma)
+		{
+			//Arrange
+			vector<string>testCase1;
+			testCase1.push_back("volume = 8;");
+			testCase1.push_back("density = volume,;");//Throws two errors
+
+			//Act
+			terp.parseSourceCode(testCase1, false, false);
+
+			//Assert
+			Assert::IsFalse(terp.BuildStatus);
+			Assert::AreEqual(2, terp.GetErrorCount());
 		}
 	};
 }

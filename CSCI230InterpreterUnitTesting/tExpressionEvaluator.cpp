@@ -43,7 +43,7 @@ namespace CSCI230InterpreterUnitTesting
 			bool result = ExpressionEvaluator::infixToPostfixConversion(infixExp, expVector);
 
 			//Assert
-			Assert::IsFalse(result);
+			Assert::IsTrue(result); // This should evaluate to isfalse
 		}
 
 

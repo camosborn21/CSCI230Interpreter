@@ -1,1 +1,5 @@
-volume read;
+volume=8;
+density = 8+(volume-3*(2/4))%2>2&&(((1+2)))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=3;
+density = 8+(volume-3*(2/4))%2>2&&1+2<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&(2!=3);
+density = 8+(volume-3*(2/4))%2>2&&(!((1+2)*24))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=volume;
+density = 8+(volume-3*(2/4))%2>2&&(((1+2)))<4||(4+5)==8&&!1||(0*1&&volume+2<=volume+3)||4>=volume&&2!=3;
