@@ -319,7 +319,8 @@ void Interpreter::checkSyntax()
 				{
 					iter->StatementType = "display";
 					//[11/25/2017 15:10] Cameron Osborn: display operation. Next token must be string literal, numeric literal, left parenthesis, variable name or logical NOT operator
-					if (nextToken.Category != ID_NAME && nextToken.Category != STRING_LITERAL && nextToken.Category!=LEFT_PARENTHESIS && nextToken.Category != NUMERICAL_LITERAL && (nextToken.Category == LOGICAL_OP&&nextToken.Token != "!"))
+					//[11/27/2017 14:07] Cameron Osborn: TestCovered
+					if (nextToken.Category != ID_NAME && nextToken.Category != STRING_LITERAL && nextToken.Category!=LEFT_PARENTHESIS && nextToken.Category != NUMERICAL_LITERAL && !(nextToken.Category == LOGICAL_OP&&nextToken.Token == "!"))
 					{
 						errors.push_back(Error("Invalid display operation: the 'display keyword must be followed by a string, number, variable name, or the logical NOT (!) operator.", token->LineNumber + 1, token->TokenNumber + 1));
 					}
@@ -330,6 +331,7 @@ void Interpreter::checkSyntax()
 			else //[11/25/2017 14:48] Cameron Osborn: now we're on subsequent tokens
 			{
 				//[11/25/2017 16:46] Cameron Osborn: ensure final token in statement is semicolon
+				//[11/27/2017 18:57] Cameron Osborn: TestCovered
 				if (tokenIndex + 1 == iter->Tokens.size())
 				{
 					if (token->Category != SEMICOLON)
@@ -347,6 +349,7 @@ void Interpreter::checkSyntax()
 						if (token->Category == STRING_LITERAL)
 						{
 							//[11/25/2017 17:01] Cameron Osborn: string literal can only be followed by a comma or a semicolon
+							//[11/27/2017 20:19] Cameron Osborn: TestCovered
 							if (nextToken.Category != COMMA&&nextToken.Category != SEMICOLON)
 							{
 								errors.push_back(Error("Invalid syntax. In a display statement, a string literal can only be followed by a comma or a semi colon.", token->LineNumber + 1, token->TokenNumber + 1));
@@ -357,6 +360,7 @@ void Interpreter::checkSyntax()
 							if (token->Category == NUMERICAL_LITERAL || token->Category == ID_NAME)
 							{
 								//[11/25/2017 17:11] Cameron Osborn: valid tokens following Numeric literal and ID name: any op except logical NOT operator, right paren, semi colon, comma
+								//[11/27/2017 20:19] Cameron Osborn: LEFT OFF HERE WITH TEST COVERAGE CHECKS
 								if (nextToken.Category != RELATIONAL_OP&& nextToken.Category != SEMICOLON  &&nextToken.Category != NUMERICAL_OP&&nextToken.Category != RIGHT_PARENTHESIS && (nextToken.Category != LOGICAL_OP&&nextToken.Token == "!") && nextToken.Category != COMMA)
 								{
 									errors.push_back(Error("Invalid syntax. Numeric literal or variable cannot be followed by the " + nextToken.GetTokenCategoryName() + " token: " + nextToken.Token + ".", token->LineNumber + 1, token->TokenNumber + 1));
